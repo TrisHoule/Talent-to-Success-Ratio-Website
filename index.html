@@ -59,7 +59,7 @@
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <h3 id="modal-player-name" class="text-2xl font-bold text-white">Player Name</h3>
-                        <span id="modal-player-tier" class="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300">Tier Info</span>
+                        <span id="modal-player-tier" class="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-md">Tier Info</span>
                     </div>
                     <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -107,10 +107,7 @@
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
-                                <option value="Tier 1: Elite / Near-Ready Impact">Tier 1: Elite / Impact</option>
-                                <option value="Tier 2: Premium System Pillars">Tier 2: Premium Pillars</option>
-                                <option value="Tier 3: Active Core Utility & Bench Assets">Tier 3: Core Utility</option>
-                                <option value="Tier 4: Triple-A Stalwarts">Tier 4: Triple-A Stalwarts</option>
+                                <!-- Dynamically mounted options via adaptFormLabels() -->
                             </select>
                         </div>
                         <div>
@@ -172,14 +169,46 @@
             return text;
         }
 
-        function getTierColor(tierString) {
-            if (!tierString) return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
-            const lower = tierString.toLowerCase();
-            if (lower.includes('tier 1')) return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30', hex: '#f59e0b' };
-            if (lower.includes('tier 2')) return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', hex: '#10b981' };
-            if (lower.includes('tier 3')) return { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30', hex: '#3b82f6' };
-            if (lower.includes('tier 4')) return { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30', hex: '#a855f7' };
-            return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
+        // Context-Aware Palette Configuration Mapping Matrix
+        function getTierColor(tabName, tierString) {
+            const fallbackColors = { bg: '#1e293b', text: '#cbd5e1', border: 'border-slate-800' };
+            if (!tierString) return fallbackColors;
+            
+            const lowerTier = tierString.toLowerCase();
+            const lowerTab = tabName.toLowerCase();
+
+            // 1. ACTIVE PROSPECTS PALETTE
+            if (lowerTab.includes('prospects')) {
+                if (lowerTier.includes('tier 1')) return { bg: '#E2F0D9', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 2')) return { bg: '#E6F4EA', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 3')) return { bg: '#FFF2CC', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 4')) return { bg: '#FCE8E6', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 5')) return { bg: '#F1F3F4', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 6')) return { bg: '#E8F0FE', text: '#000000', border: 'border-transparent' };
+            }
+            
+            // 2. ACTIVE MAJOR LEAGUERS PALETTE
+            if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
+                if (lowerTier.includes('tier 1')) return { bg: '#D0E1FD', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 2')) return { bg: '#E1F5FE', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 3')) return { bg: '#EAE8FF', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 4')) return { bg: '#FFF3E0', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 5')) return { bg: '#F5F5F5', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 6')) return { bg: '#EFEBE9', text: '#000000', border: 'border-transparent' };
+            }
+
+            // 3. HISTORICAL ARCHIVE PALETTE
+            if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
+                if (lowerTier.includes('tier 1')) return { bg: '#E2E3E5', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 2')) return { bg: '#EBECEF', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 3')) return { bg: '#FDF6E2', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 4')) return { bg: '#F4F5F7', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 5')) return { bg: '#F8F9FA', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 6')) return { bg: '#FAFAFA', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 7')) return { bg: '#FFFFFF', text: '#000000', border: 'border-transparent' };
+            }
+
+            return fallbackColors;
         }
 
         async function loadTabData(tabName) {
@@ -198,7 +227,6 @@
                 const data = await response.json();
                 
                 if (Array.isArray(data) && data.length > 0) {
-                    // Pull whatever exact keys SheetDB gave us for this row
                     activeSheetSchemaKeys = Object.keys(data[0]);
 
                     data.forEach(row => {
@@ -239,14 +267,16 @@
             if (localPlayersCache.length === 0) return;
 
             localPlayersCache.forEach((player, index) => {
-                const colors = getTierColor(player.tier);
+                const config = getTierColor(currentTab, player.tier);
                 const badge = document.createElement('div');
-                badge.className = `p-3 rounded-xl border ${colors.bg} ${colors.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
+                
+                badge.className = `p-3 rounded-xl border ${config.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
+                badge.style.backgroundColor = config.bg;
                 badge.onclick = () => openModal(index);
                 
                 badge.innerHTML = `
-                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.name}</div>
-                    <div class="text-[10px] font-bold uppercase tracking-wider ${colors.text} truncate mt-1">
+                    <div class="font-bold transition text-sm sm:text-base line-clamp-2" style="color: ${config.text}">${player.name}</div>
+                    <div class="text-[10px] font-extrabold uppercase tracking-wider opacity-85 truncate mt-1" style="color: ${config.text}">
                         ${player.score ? 'Score: ' + player.score : 'Unrated'}
                     </div>
                 `;
@@ -256,12 +286,16 @@
 
         function openModal(index) {
             const player = localPlayersCache[index];
-            const colors = getTierColor(player.tier);
+            const config = getTierColor(currentTab, player.tier);
             
-            document.getElementById('modal-accent-bar').style.backgroundColor = colors.hex;
+            document.getElementById('modal-accent-bar').style.backgroundColor = config.bg;
             document.getElementById('modal-player-name').innerText = player.name;
-            document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
-            document.getElementById('modal-player-tier').innerText = player.tier || 'Unclassified Profile';
+            
+            const badgeEl = document.getElementById('modal-player-tier');
+            badgeEl.style.backgroundColor = config.bg;
+            badgeEl.style.color = config.text;
+            badgeEl.innerText = player.tier || 'Unclassified Profile';
+            
             document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged.';
 
             const metaGrid = document.getElementById('modal-meta-grid');
@@ -336,24 +370,62 @@
             setTimeout(() => { modal.classList.add('hidden'); document.getElementById('add-player-form').reset(); }, 250);
         }
 
+        // Dynamically adapts both Input Form labels and Tier selector options based on selected sheet destination
         function adaptFormLabels() {
             const selectedTab = document.getElementById('form-target-tab').value;
             const labelCol4 = document.getElementById('label-col4');
             const labelCol8 = document.getElementById('label-col8');
             const inputCol8 = document.getElementById('form-col8');
+            const tierSelector = document.getElementById('form-tier');
+
+            tierSelector.innerHTML = '';
 
             if (selectedTab === 'Historical Archive (Inactives)') {
                 labelCol4.innerText = "Highest Level Met";
                 labelCol8.innerText = "Peak Board Placement";
                 inputCol8.placeholder = "e.g., #15 Peak Prospect Standing";
+
+                const options = [
+                    "Tier 1: Major League Regulars / High-Impact Veterans",
+                    "Tier 2: Major League Depth / Up-and-Down Relievers",
+                    "Tier 3: Quad-A Lifers / International Expatriates",
+                    "Tier 4: Triple-A Stalwarts",
+                    "Tier 5: Double-A Advanced Corners",
+                    "Tier 6: Full-Season Single-A Anchors",
+                    "Tier 7: Complex League / Short-Season Stints"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
             } else if (selectedTab === 'Active Major Leaguers') {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Career MLB Stats";
                 inputCol8.placeholder = "e.g., .254 AVG, 84 HR";
+
+                const options = [
+                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)",
+                    "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
+                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)",
+                    "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
+                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)",
+                    "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
             } else {
+                // Defaulting to Active Prospects Layout
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Current Prospect Standing";
                 inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
+
+                const options = [
+                    "Tier 1: Elite / Near-Ready Impact",
+                    "Tier 2: Premium System Pillars",
+                    "Tier 3: Projected Major League Role Players",
+                    "Tier 4: High-Variance / Toolsy Sleepers",
+                    "Tier 5: Organizational Depth / Low-Minor Projects",
+                    "Tier 6: Pure International Professionals"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
             }
         }
 
@@ -367,7 +439,6 @@
 
             const targetTab = document.getElementById('form-target-tab').value;
 
-            // Fallback generation logic if keys are missing from a blank sheet fetch
             if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 2) {
                 activeSheetSchemaKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
             }
@@ -384,7 +455,6 @@
 
             const rowPayload = {};
             
-            // Map inputs structurally by absolute position index matching the keys SheetDB handles
             rowPayload[activeSheetSchemaKeys[0] || "field_1"] = ""; 
             rowPayload[activeSheetSchemaKeys[1] || "Player"] = pName;
             rowPayload[activeSheetSchemaKeys[2] || "Tier"] = pTier;
