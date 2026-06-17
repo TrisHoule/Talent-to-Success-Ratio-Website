@@ -46,7 +46,7 @@
             <div id="loading-indicator" class="text-sm text-blue-400 animate-pulse">Syncing data...</div>
         </div>
 
-        <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <!-- Dynamic items mount here -->
         </div>
     </main>
@@ -54,12 +54,12 @@
     <!-- POP-OUT DETAILS MODAL SCREEN -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
-            <div id="modal-accent-bar" class="h-2 w-full bg-blue-500"></div>
+            <div id="modal-accent-bar" class="h-1.5 w-full"></div>
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <h3 id="modal-player-name" class="text-2xl font-bold text-white">Player Name</h3>
-                        <span id="modal-player-tier" class="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-md">Tier Info</span>
+                        <span id="modal-player-tier" class="inline-block mt-2 px-2.5 py-1 text-xs font-bold rounded border">Tier Info</span>
                     </div>
                     <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -78,7 +78,7 @@
     <!-- ADD NEW PLAYER PROFILE MODAL -->
     <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
-            <div class="h-2 w-full bg-emerald-500"></div>
+            <div class="h-1.5 w-full bg-emerald-500"></div>
             <div class="p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold text-white">Add New Database Record</h3>
@@ -107,7 +107,7 @@
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
-                                <!-- Dynamically mounted options via adaptFormLabels() -->
+                                <!-- Dynamic options injected via JavaScript -->
                             </select>
                         </div>
                         <div>
@@ -169,46 +169,46 @@
             return text;
         }
 
-        // Context-Aware Palette Configuration Mapping Matrix
+        // Resolves the exact hexadecimal asset color code based on context configurations
         function getTierColor(tabName, tierString) {
-            const fallbackColors = { bg: '#1e293b', text: '#cbd5e1', border: 'border-slate-800' };
-            if (!tierString) return fallbackColors;
+            const defaultColor = '#475569'; // Slate 600 default fallback
+            if (!tierString) return defaultColor;
             
             const lowerTier = tierString.toLowerCase();
             const lowerTab = tabName.toLowerCase();
 
             // 1. ACTIVE PROSPECTS PALETTE
             if (lowerTab.includes('prospects')) {
-                if (lowerTier.includes('tier 1')) return { bg: '#E2F0D9', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 2')) return { bg: '#E6F4EA', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 3')) return { bg: '#FFF2CC', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 4')) return { bg: '#FCE8E6', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 5')) return { bg: '#F1F3F4', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 6')) return { bg: '#E8F0FE', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 1')) return '#E2F0D9';
+                if (lowerTier.includes('tier 2')) return '#E6F4EA';
+                if (lowerTier.includes('tier 3')) return '#FFF2CC';
+                if (lowerTier.includes('tier 4')) return '#FCE8E6';
+                if (lowerTier.includes('tier 5')) return '#F1F3F4';
+                if (lowerTier.includes('tier 6')) return '#E8F0FE';
             }
             
             // 2. ACTIVE MAJOR LEAGUERS PALETTE
             if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
-                if (lowerTier.includes('tier 1')) return { bg: '#D0E1FD', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 2')) return { bg: '#E1F5FE', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 3')) return { bg: '#EAE8FF', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 4')) return { bg: '#FFF3E0', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 5')) return { bg: '#F5F5F5', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 6')) return { bg: '#EFEBE9', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 1')) return '#D0E1FD';
+                if (lowerTier.includes('tier 2')) return '#E1F5FE';
+                if (lowerTier.includes('tier 3')) return '#EAE8FF';
+                if (lowerTier.includes('tier 4')) return '#FFF3E0';
+                if (lowerTier.includes('tier 5')) return '#F5F5F5';
+                if (lowerTier.includes('tier 6')) return '#EFEBE9';
             }
 
             // 3. HISTORICAL ARCHIVE PALETTE
             if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
-                if (lowerTier.includes('tier 1')) return { bg: '#E2E3E5', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 2')) return { bg: '#EBECEF', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 3')) return { bg: '#FDF6E2', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 4')) return { bg: '#F4F5F7', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 5')) return { bg: '#F8F9FA', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 6')) return { bg: '#FAFAFA', text: '#000000', border: 'border-transparent' };
-                if (lowerTier.includes('tier 7')) return { bg: '#FFFFFF', text: '#000000', border: 'border-transparent' };
+                if (lowerTier.includes('tier 1')) return '#E2E3E5';
+                if (lowerTier.includes('tier 2')) return '#EBECEF';
+                if (lowerTier.includes('tier 3')) return '#FDF6E2';
+                if (lowerTier.includes('tier 4')) return '#F4F5F7';
+                if (lowerTier.includes('tier 5')) return '#F8F9FA';
+                if (lowerTier.includes('tier 6')) return '#FAFAFA';
+                if (lowerTier.includes('tier 7')) return '#FFFFFF';
             }
 
-            return fallbackColors;
+            return defaultColor;
         }
 
         async function loadTabData(tabName) {
@@ -267,16 +267,17 @@
             if (localPlayersCache.length === 0) return;
 
             localPlayersCache.forEach((player, index) => {
-                const config = getTierColor(currentTab, player.tier);
+                const hexColor = getTierColor(currentTab, player.tier);
                 const badge = document.createElement('div');
                 
-                badge.className = `p-3 rounded-xl border ${config.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
-                badge.style.backgroundColor = config.bg;
+                // Keep background elegant dark slate, apply the clean top accent color bar
+                badge.className = `p-4 bg-slate-900 border border-slate-800 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24 shadow-sm hover:shadow-md`;
+                badge.style.borderTop = `4px solid ${hexColor}`;
                 badge.onclick = () => openModal(index);
                 
                 badge.innerHTML = `
-                    <div class="font-bold transition text-sm sm:text-base line-clamp-2" style="color: ${config.text}">${player.name}</div>
-                    <div class="text-[10px] font-extrabold uppercase tracking-wider opacity-85 truncate mt-1" style="color: ${config.text}">
+                    <div class="font-semibold text-slate-100 group-hover:text-white transition text-sm sm:text-base line-clamp-2">${player.name}</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider mt-1" style="color: ${hexColor}">
                         ${player.score ? 'Score: ' + player.score : 'Unrated'}
                     </div>
                 `;
@@ -286,14 +287,15 @@
 
         function openModal(index) {
             const player = localPlayersCache[index];
-            const config = getTierColor(currentTab, player.tier);
+            const hexColor = getTierColor(currentTab, player.tier);
             
-            document.getElementById('modal-accent-bar').style.backgroundColor = config.bg;
+            document.getElementById('modal-accent-bar').style.backgroundColor = hexColor;
             document.getElementById('modal-player-name').innerText = player.name;
             
             const badgeEl = document.getElementById('modal-player-tier');
-            badgeEl.style.backgroundColor = config.bg;
-            badgeEl.style.color = config.text;
+            badgeEl.style.borderColor = `${hexColor}40`; // Translucent border edge
+            badgeEl.style.color = hexColor;
+            badgeEl.style.backgroundColor = `${hexColor}10`; // Low micro-opacity fill
             badgeEl.innerText = player.tier || 'Unclassified Profile';
             
             document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged.';
@@ -370,7 +372,6 @@
             setTimeout(() => { modal.classList.add('hidden'); document.getElementById('add-player-form').reset(); }, 250);
         }
 
-        // Dynamically adapts both Input Form labels and Tier selector options based on selected sheet destination
         function adaptFormLabels() {
             const selectedTab = document.getElementById('form-target-tab').value;
             const labelCol4 = document.getElementById('label-col4');
@@ -412,7 +413,6 @@
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
 
             } else {
-                // Defaulting to Active Prospects Layout
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Current Prospect Standing";
                 inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
