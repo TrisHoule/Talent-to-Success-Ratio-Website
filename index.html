@@ -16,6 +16,7 @@
             --accent-amber: #f59e0b;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
+            --border-color: #334155;
         }
 
         body {
@@ -25,23 +26,39 @@
             background-color: var(--bg-dark);
             color: var(--text-light);
             min-height: 100vh;
+        }
+
+        header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .wrapper {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 40px 20px;
             width: 100%;
             box-sizing: border-box;
         }
 
-        /* Portal Home View */
         #portal-home {
             text-align: center;
-            animation: fadeIn 0.5s ease forward;
+            animation: fadeIn 0.5s ease forwards;
         }
 
         h1 {
@@ -69,7 +86,7 @@
 
         .category-card {
             background-color: var(--bg-deep);
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 35px 30px;
             text-align: left;
@@ -89,7 +106,6 @@
             top: 0; left: 0; width: 4px; height: 100%;
         }
 
-        /* Unique Color coding for columns */
         .card-majors::before { background-color: var(--accent-green); }
         .card-prospects::before { background-color: var(--accent-blue); }
         .card-inactives::before { background-color: var(--accent-amber); }
@@ -100,86 +116,152 @@
             box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.5);
         }
 
-        .category-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
+        .category-card h3 { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 700; }
+        .category-card p { margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+        .card-arrow { align-self: flex-end; font-size: 1.2rem; color: var(--text-muted); transition: transform 0.2s ease; }
+        .category-card:hover .card-arrow { transform: translateX(5px); color: #ffffff; }
 
-        .category-card p {
-            margin: 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .card-arrow {
-            align-self: flex-end;
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            transition: transform 0.2s ease;
-        }
-
-        .category-card:hover .card-arrow {
-            transform: translateX(5px);
-            color: #ffffff;
-        }
-
-        /* Category Sub-Panels (Hidden by default) */
-        .category-panel {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .back-btn {
+        .category-panel { display: none; animation: fadeIn 0.4s ease; }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 30px; }
+        
+        .btn {
             background-color: var(--bg-deep);
             color: var(--text-light);
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color);
             padding: 10px 18px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
+        .btn:hover { background-color: #334155; border-color: #475569; }
+        .btn-primary { background-color: var(--accent-blue); border-color: var(--accent-blue); }
+        .btn-primary:hover { background-color: #2563eb; }
 
-        .back-btn:hover {
-            background-color: #334155;
-            color: white;
-        }
-
-        .placeholder-content {
-            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #111827 10px, #111827 20px);
-            border: 2px dashed #334155;
+        /* Real Data Grid Tables Architecture */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            background-color: var(--bg-deep);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 80px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: rgba(15, 23, 42, 0.6);
+            color: var(--text-muted);
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.5;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: rgba(51, 65, 85, 0.3); }
+
+        .badge-score {
+            display: inline-block;
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .loading-state {
+            padding: 60px 20px;
             text-align: center;
             color: var(--text-muted);
             font-weight: 500;
         }
 
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--accent-blue);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        /* Modal Layout Window */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            z-index: 1000; padding: 20px; box-sizing: border-box;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-card {
+            background-color: var(--bg-deep);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%; max-width: 550px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px); transition: transform 0.3s ease;
+            display: flex; flex-direction: column; max-height: 90vh;
+        }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        
+        .modal-header { padding: 20px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 1.3rem; font-weight: 700; }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .close-modal:hover { color: white; }
+
+        .modal-body { padding: 25px; overflow-y: auto; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; }
+        .form-control {
+            width: 100%; background-color: var(--bg-dark); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 12px; color: white; font-family: inherit; font-size: 0.95rem;
+            box-sizing: border-box; transition: border-color 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent-blue); }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        
+        .modal-footer { padding: 20px 25px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.98); }
             to { opacity: 1; transform: scale(1); }
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+<header>
+    <div class="header-title" onclick="showHome()">Talent-to-Success Database</div>
+    <button class="btn btn-primary" onclick="openAddPlayerModal()">⚡ Add New Player</button>
+</header>
+
 <div class="wrapper">
-    <!-- Main Hub Landing Section -->
     <div id="portal-home">
         <h1>Talent-to-Success Database</h1>
         <div class="subtitle">Select a player pool dimension to begin tracking or evaluating metrics</div>
-        
         <div class="grid-container">
             <div class="category-card card-majors" onclick="openPanel('panel-majors')">
                 <div>
@@ -188,7 +270,6 @@
                 </div>
                 <div class="card-arrow">Explore Pool ➔</div>
             </div>
-
             <div class="category-card card-prospects" onclick="openPanel('panel-prospects')">
                 <div>
                     <h3>Active Prospects</h3>
@@ -196,7 +277,6 @@
                 </div>
                 <div class="card-arrow">Explore Pool ➔</div>
             </div>
-
             <div class="category-card card-inactives" onclick="openPanel('panel-inactives')">
                 <div>
                     <h3>Historical Archive (Inactives)</h3>
@@ -207,52 +287,285 @@
         </div>
     </div>
 
-    <!-- Active Major Leaguers View Dashboard Panel -->
     <div id="panel-majors" class="category-panel">
-        <div class="panel-header">
-            <h2>Active Major Leaguers Dashboard</h2>
-            <button class="back-btn" onclick="showHome()">← Back to Hub</button>
-        </div>
-        <div class="placeholder-content">
-            Data loading grid pipeline will be wired here next.
+        <div class="panel-header"><h2>Active Major Leaguers</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Tier</th>
+                        <th>Score</th>
+                        <th>Current Org</th>
+                        <th>Past Orgs</th>
+                        <th>Drafted By</th>
+                        <th>Career MLB Stats</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyMajors">
+                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Active Prospects View Dashboard Panel -->
     <div id="panel-prospects" class="category-panel">
-        <div class="panel-header">
-            <h2>Active Prospects Dashboard</h2>
-            <button class="back-btn" onclick="showHome()">← Back to Hub</button>
-        </div>
-        <div class="placeholder-content">
-            Data loading grid pipeline will be wired here next.
+        <div class="panel-header"><h2>Active Prospects</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Tier</th>
+                        <th>Score</th>
+                        <th>Current Org</th>
+                        <th>Past Orgs</th>
+                        <th>Drafted By</th>
+                        <th>Current Standing</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyProspects">
+                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Historical Archive View Dashboard Panel -->
     <div id="panel-inactives" class="category-panel">
-        <div class="panel-header">
-            <h2>Historical Archive Dashboard</h2>
-            <button class="back-btn" onclick="showHome()">← Back to Hub</button>
-        </div>
-        <div class="placeholder-content">
-            Data loading grid pipeline will be wired here next.
+        <div class="panel-header"><h2>Historical Archive (Inactives)</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Tier</th>
+                        <th>Score</th>
+                        <th>Highest Level</th>
+                        <th>Past Orgs</th>
+                        <th>Drafted By</th>
+                        <th>Peak Standing</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyInactives">
+                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
+<div id="playerModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>Add Player Profile</h2>
+            <button class="close-modal" onclick="closeAddPlayerModal()">&times;</button>
+        </div>
+        <form id="playerForm" action="YOUR_GOOGLE_FORM_POST_URL" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="playerSection">Target Section Pool</label>
+                    <select id="playerSection" class="form-control" onchange="adjustFormCriteria(this.value)">
+                        <option value="majors">Active Major Leaguers</option>
+                        <option value="prospects">Active Prospects</option>
+                        <option value="inactives">Historical Archive (Inactives)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="playerName">Player Name</label>
+                    <input type="text" id="playerName" name="entry.11111" class="form-control" placeholder="e.g., Jesús Made" required>
+                </div>
+                <div class="form-group">
+                    <label for="playerTier">Scouting Evaluation Tier</label>
+                    <input type="text" id="playerTier" name="entry.22222" class="form-control" placeholder="e.g., Tier 1: Elite / Near-Ready Impact">
+                </div>
+                <div class="form-group">
+                    <label for="playerScore">Talent-to-Success Score</label>
+                    <input type="number" step="0.1" id="playerScore" name="entry.32222" class="form-control" placeholder="e.g., 9.4">
+                </div>
+                <div class="form-group" id="dynamicGroupA">
+                    <label id="labelDynamicA" for="inputDynamicA">Current Org</label>
+                    <input type="text" id="inputDynamicA" name="entry.44444" class="form-control" placeholder="e.g., MIL">
+                </div>
+                <div class="form-group">
+                    <label for="playerPastOrgs">Past Orgs</label>
+                    <input type="text" id="playerPastOrgs" name="entry.55555" class="form-control" placeholder="e.g., None">
+                </div>
+                <div class="form-group">
+                    <label for="playerDrafted">Drafted/Signed By</label>
+                    <input type="text" id="playerDrafted" name="entry.66666" class="form-control" placeholder="e.g., MIL">
+                </div>
+                <div class="form-group" id="dynamicGroupB">
+                    <label id="labelDynamicB" for="inputDynamicB">Career MLB Stats</label>
+                    <input type="text" id="inputDynamicB" name="entry.77777" class="form-control" placeholder="e.g., .280 AVG, 6 HR Context">
+                </div>
+                <div class="form-group">
+                    <label for="playerNotes">Scouting Evaluation Notes</label>
+                    <textarea id="playerNotes" name="entry.88888" class="form-control" placeholder="Enter structural player notes..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="closeAddPlayerModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Player Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 <script>
-    // Navigation Routing Scripts
+    // Configuration Engine - Swap out with your live SheetDB API string token!
+    const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
+
+    // Global Store to segment data chunks locally once read from master payload
+    let masterDatabaseRecords = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchSpreadsheetData();
+    });
+
+    async function fetchSpreadsheetData() {
+        if (SHEETDB_API_URL === 'YOUR_SHEETDB_API_URL') {
+            console.warn("SheetDB URL has not been connected yet. Operating in local preview layout mode.");
+            return;
+        }
+        try {
+            // Fetch records from all worksheet tabs exposed by your SheetDB connection bridge
+            const response = await fetch(SHEETDB_API_URL);
+            masterDatabaseRecords = await response.json();
+            renderAllTables();
+        } catch (error) {
+            console.error("Critical API data pipe failure:", error);
+            const errorMsg = "<tr><td colspan='8' style='color:#ef4444; text-align:center;'>Failed to synchronize spreadsheet record sets. Verify API status tokens.</td></tr>";
+            document.getElementById('tableBodyMajors').innerHTML = errorMsg;
+            document.getElementById('tableBodyProspects').innerHTML = errorMsg;
+            document.getElementById('tableBodyInactives').innerHTML = errorMsg;
+        }
+    }
+
+    function renderAllTables() {
+        // Clear layout rows before populating parsed inputs
+        const majorsBody = document.getElementById('tableBodyMajors');
+        const prospectsBody = document.getElementById('tableBodyProspects');
+        const inactivesBody = document.getElementById('tableBodyInactives');
+        
+        let majorsHTML = '';
+        let prospectsHTML = '';
+        let inactivesHTML = '';
+
+        masterDatabaseRecords.forEach(row => {
+            // Safe key resolution mapping against empty row allocations or cell variances
+            const player = row['Player'] || '';
+            if (!player.trim()) return; // Skip blank layout lines
+
+            const tier = row['Tier'] || 'Unassigned';
+            const score = row['Talent-to-Success Score'] || '—';
+            const pastOrgs = row['Past Orgs'] || 'None';
+            const draftedBy = row['Drafted/Signed By'] || '—';
+            const notes = row['Notes'] || '';
+
+            // Segment record chunks cleanly by scanning Sheet configuration headers or column flags
+            if (row.hasOwnProperty('Career MLB Stats') || ('Current Org' in row && !row.hasOwnProperty('Current Prospect Standing') && !row.hasOwnProperty('Highest Level'))) {
+                const currentOrg = row['Current Org'] || '—';
+                const stats = row['Career MLB Stats'] || '—';
+                majorsHTML += `<tr>
+                    <td><strong>${player}</strong></td>
+                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
+                    <td><span class="badge-score">${score}</span></td>
+                    <td>${currentOrg}</td>
+                    <td>${pastOrgs}</td>
+                    <td>${draftedBy}</td>
+                    <td style="font-family:monospace; font-size:0.85rem;">${stats}</td>
+                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
+                </tr>`;
+            } else if (row.hasOwnProperty('Current Prospect Standing')) {
+                const currentOrg = row['Current Org'] || '—';
+                const standing = row['Current Prospect Standing'] || '—';
+                prospectsHTML += `<tr>
+                    <td><strong>${player}</strong></td>
+                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
+                    <td><span class="badge-score">${score}</span></td>
+                    <td>${currentOrg}</td>
+                    <td>${pastOrgs}</td>
+                    <td>${draftedBy}</td>
+                    <td><span style="color:#60a5fa; font-weight:500;">${standing}</span></td>
+                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
+                </tr>`;
+            } else if (row.hasOwnProperty('Highest Level') || row.hasOwnProperty('Peak Prospect Standing')) {
+                const highestLevel = row['Highest Level'] || '—';
+                const peakStanding = row['Peak Prospect Standing'] || '—';
+                inactivesHTML += `<tr>
+                    <td><strong>${player}</strong></td>
+                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
+                    <td><span class="badge-score">${score}</span></td>
+                    <td>${highestLevel}</td>
+                    <td>${pastOrgs}</td>
+                    <td>${draftedBy}</td>
+                    <td>${peakStanding}</td>
+                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
+                </tr>`;
+            }
+        });
+
+        majorsBody.innerHTML = majorsHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No active Major League records mapped.</td></tr>";
+        prospectsBody.innerHTML = prospectsHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No active Prospect records mapped.</td></tr>";
+        inactivesBody.innerHTML = inactivesHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No archival record frames found.</td></tr>";
+    }
+
+    // View Navigation Scripts
     function openPanel(panelId) {
         document.getElementById('portal-home').style.display = 'none';
         document.getElementById(panelId).style.display = 'block';
     }
 
     function showHome() {
-        document.querySelectorAll('.category-panel').forEach(panel => {
-            panel.style.display = 'none';
-        });
+        document.querySelectorAll('.category-panel').forEach(panel => panel.style.display = 'none');
         document.getElementById('portal-home').style.display = 'block';
+    }
+
+    function openAddPlayerModal() {
+        document.getElementById('playerModal').classList.add('active');
+    }
+
+    function closeAddPlayerModal() {
+        document.getElementById('playerModal').classList.remove('active');
+        document.getElementById('playerForm').reset();
+        adjustFormCriteria('majors');
+    }
+
+    // Dynamic Context Switcher Engine mapping column attributes directly to spreadsheet structures
+    function adjustFormCriteria(selectedSection) {
+        const labelA = document.getElementById('labelDynamicA');
+        const inputA = document.getElementById('inputDynamicA');
+        const labelB = document.getElementById('labelDynamicB');
+        const inputB = document.getElementById('inputDynamicB');
+
+        if (selectedSection === 'majors') {
+            labelA.innerText = "Current Org";
+            inputA.placeholder = "e.g., ATL";
+            labelB.innerText = "Career MLB Stats";
+            inputB.placeholder = "e.g., .227 / .324 / .748 / 93 HR / 285 RBI";
+        } else if (selectedSection === 'prospects') {
+            labelA.innerText = "Current Org";
+            inputA.placeholder = "e.g., MIL";
+            labelB.innerText = "Current Prospect Standing";
+            inputB.placeholder = "e.g., #1 Prospect in Baseball (2026)";
+        } else if (selectedSection === 'inactives') {
+            labelA.innerText = "Highest Level Achieved";
+            inputA.placeholder = "e.g., Triple-A";
+            labelB.innerText = "Peak Prospect Standing";
+            inputB.placeholder = "e.g., Historic 9-Position Single-Game Player";
+        }
+    }
+
+    function handleFormSubmit(e) {
+        alert("Player profile data sent directly to spreadsheet ingestion pipeline!");
+        closeAddPlayerModal();
+        // Give Google Sheets 2-3 seconds to ingest before refetching tables automatically
+        setTimeout(fetchSpreadsheetData, 2500);
     }
 </script>
 
