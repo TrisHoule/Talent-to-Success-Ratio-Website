@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
+    <!-- Tailwind CSS Dynamic CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        .modal-transition { transition: opacity 0.25s ease, transform 0.25s ease; }
+        .modal-transition {
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
+    <!-- Header Navigation Bar -->
     <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
@@ -18,10 +22,20 @@
             </h1>
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto justify-end">
                 <nav class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 w-full sm:w-auto justify-center">
-                    <button onclick="switchTab('Active Prospects')" id="btn-ActiveProspects" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white">Active Prospects</button>
-                    <button onclick="switchTab('Active Major Leaguers')" id="btn-ActiveMajorLeaguers" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">Active MLB</button>
-                    <button onclick="switchTab('Historical Archive (Inactives)')" id="btn-HistoricalArchive" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">Historical Archive</button>
+                    <button onclick="switchTab('Active Prospects')" id="btn-ActiveProspects" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white">
+                        Active Prospects
+                    </button>
+                    <button onclick="switchTab('Active Major Leaguers')" id="btn-ActiveMajorLeaguers" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                        Active MLB
+                    </button>
+                    <button onclick="switchTab('Historical Archive (Inactives)')" id="btn-HistoricalArchive" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                        Historical Archive
+                    </button>
                 </nav>
+                <button onclick="openAddPlayerModal()" class="w-full sm:w-auto px-4 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Player
+                </button>
             </div>
         </div>
     </header>
@@ -31,32 +45,131 @@
             <h2 id="current-tab-title" class="text-2xl font-semibold text-slate-200">Active Prospects</h2>
             <div id="loading-indicator" class="text-sm text-blue-400 animate-pulse">Syncing data...</div>
         </div>
-        <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+
+        <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <!-- Dynamic items mount here -->
+        </div>
     </main>
 
-    <!-- Modal remains the same structure -->
+    <!-- POP-OUT DETAILS MODAL SCREEN -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
             <div id="modal-accent-bar" class="h-1.5 w-full"></div>
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
-                        <h3 id="modal-player-name" class="text-2xl font-bold text-white"></h3>
-                        <span id="modal-player-tier" class="inline-block mt-2 px-2.5 py-1 text-xs font-bold rounded border"></span>
+                        <h3 id="modal-player-name" class="text-2xl font-bold text-white">Player Name</h3>
+                        <span id="modal-player-tier" class="inline-block mt-2 px-2.5 py-1 text-xs font-bold rounded border">Tier Info</span>
                     </div>
-                    <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">✕</button>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
-                <div id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto"></div>
+                <hr class="border-slate-800 my-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="modal-meta-grid"></div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Scouting Reports & Notes</h4>
+                    <p id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto"></p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ADD NEW PLAYER PROFILE MODAL -->
+    <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
+            <div class="h-1.5 w-full bg-emerald-500"></div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-white">Add New Database Record</h3>
+                    <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <form id="add-player-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Spreadsheet Tab</label>
+                            <select id="form-target-tab" onchange="adaptFormLabels()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                <option value="Active Prospects">Active Prospects</option>
+                                <option value="Active Major Leaguers">Active Major Leaguers</option>
+                                <option value="Historical Archive (Inactives)">Historical Archive (Inactives)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Player Full Name</label>
+                            <input type="text" id="form-name" required placeholder="e.g., Dylan Crews" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Evaluation Tier Classification</label>
+                            <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                <!-- Dynamic options injected via JavaScript -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Talent-to-Success Score</label>
+                            <input type="number" step="0.1" min="0" max="10" id="form-score" placeholder="e.g., 7.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label id="label-col4" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Org</label>
+                            <input type="text" id="form-col4" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Past Orgs</label>
+                            <input type="text" id="form-col5" placeholder="e.g., LAD, BOS (or None)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Drafted/Signed By</label>
+                            <input type="text" id="form-col6" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label id="label-col8" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Prospect Standing</label>
+                        <input type="text" id="form-col8" placeholder="e.g., #4 Prospect in Baseball (2026)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Scouting Reports & Performance Notes</label>
+                        <textarea id="form-notes" rows="4" placeholder="Log extensive descriptive profile summaries here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 text-sm font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition cursor-pointer">Cancel</button>
+                        <button type="submit" id="submit-btn" class="px-5 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition shadow-md flex items-center gap-2 cursor-pointer">
+                            Save to Database
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SYSTEM PIPELINE ARCHITECTURE -->
     <script>
         const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
+        let activeSheetSchemaKeys = []; 
 
-       // Resolves the color by cleaning the input and performing a fuzzy match on the tier name
+        function parseCleanText(rawString) {
+            if (!rawString || rawString === "undefined" || rawString === "null") return "";
+            let text = String(rawString).trim();
+            if (text.toUpperCase().startsWith("=HYPERLINK")) {
+                const matches = text.match(/",\s*"([^"]+)"\s*\)$|",\s*"([^"]+)"\s*\)/i);
+                if (matches) return matches[1] || matches[2] || text;
+            }
+            return text;
+        }
+
+        // Resolves the color by cleaning the input and performing a fuzzy match on the tier name
 function getTierColor(tabName, tierString) {
     const defaultColor = '#475569'; // Slate 600 default
     if (!tierString) return defaultColor;
@@ -100,53 +213,319 @@ function getTierColor(tabName, tierString) {
 }
 
         async function loadTabData(tabName) {
+            const loadingIndicator = document.getElementById('loading-indicator');
             const grid = document.getElementById('player-grid');
-            grid.innerHTML = '';
+            
+            loadingIndicator.classList.remove('hidden');
+            grid.innerHTML = ''; 
             localPlayersCache = [];
+
             try {
-                const response = await fetch(`${BASE_API_URL}?sheet=${encodeURIComponent(tabName)}`);
+                const cleanTabName = encodeURIComponent(tabName.trim());
+                const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}`;
+                
+                const response = await fetch(targetUrl);
                 const data = await response.json();
-                localPlayersCache = data;
-                renderPlayerBadges();
-            } catch (error) { console.error(error); }
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    activeSheetSchemaKeys = Object.keys(data[0]);
+
+                    data.forEach(row => {
+                        const values = Object.values(row).map(v => String(v).trim());
+                        const rawPlayerField = values[1];
+                        if (!rawPlayerField || rawPlayerField === "undefined" || rawPlayerField === "") return;
+                        
+                        const playerText = parseCleanText(rawPlayerField);
+                        if (playerText === "" || playerText.toUpperCase() === "PLAYER" || playerText.includes("Talent-to-Success") || playerText.includes("💡") || playerText.includes("#REF!")) return;
+
+                        localPlayersCache.push({
+                            name: playerText,
+                            tier: parseCleanText(values[2]),
+                            score: parseCleanText(values[3]),
+                            col4: parseCleanText(values[4]), 
+                            col5: parseCleanText(values[5]), 
+                            col6: parseCleanText(values[6]), 
+                            col7: parseCleanText(values[7]), 
+                            col8: parseCleanText(values[8]), 
+                            notes: parseCleanText(values[9])  
+                        });
+                    });
+                    renderPlayerBadges();
+                } else {
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No profiles found inside this sheet.</div>`;
+                }
+            } catch (error) {
+                console.error("Pipeline Sync Failure:", error);
+                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to sync database rows. Verify structural integrity parameters.</div>`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
         }
 
         function renderPlayerBadges() {
             const grid = document.getElementById('player-grid');
+            grid.innerHTML = '';
+            if (localPlayersCache.length === 0) return;
+
             localPlayersCache.forEach((player, index) => {
-                const hexColor = getTierColor(currentTab, player.Tier);
+                const hexColor = getTierColor(currentTab, player.tier);
                 const badge = document.createElement('div');
-                badge.className = `p-4 bg-slate-900 border border-slate-800 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col h-24`;
+                
+                // Keep background elegant dark slate, apply the clean top accent color bar
+                badge.className = `p-4 bg-slate-900 border border-slate-800 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24 shadow-sm hover:shadow-md`;
                 badge.style.borderTop = `4px solid ${hexColor}`;
                 badge.onclick = () => openModal(index);
-                badge.innerHTML = `<div class="font-semibold text-slate-100 text-sm line-clamp-2">${player.Player}</div>`;
+                
+                badge.innerHTML = `
+                    <div class="font-semibold text-slate-100 group-hover:text-white transition text-sm sm:text-base line-clamp-2">${player.name}</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider mt-1" style="color: ${hexColor}">
+                        ${player.score ? 'Score: ' + player.score : 'Unrated'}
+                    </div>
+                `;
                 grid.appendChild(badge);
             });
         }
 
         function openModal(index) {
             const player = localPlayersCache[index];
-            const hexColor = getTierColor(currentTab, player.Tier);
+            const hexColor = getTierColor(currentTab, player.tier);
+            
             document.getElementById('modal-accent-bar').style.backgroundColor = hexColor;
-            document.getElementById('modal-player-name').innerText = player.Player;
-            document.getElementById('modal-player-tier').innerText = player.Tier;
-            document.getElementById('modal-player-notes').innerText = player.Notes || 'No notes.';
-            document.getElementById('player-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('player-modal').classList.remove('opacity-0'), 10);
+            document.getElementById('modal-player-name').innerText = player.name;
+            
+            const badgeEl = document.getElementById('modal-player-tier');
+            badgeEl.style.borderColor = `${hexColor}40`; // Translucent border edge
+            badgeEl.style.color = hexColor;
+            badgeEl.style.backgroundColor = `${hexColor}10`; // Low micro-opacity fill
+            badgeEl.innerText = player.tier || 'Unclassified Profile';
+            
+            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged.';
+
+            const metaGrid = document.getElementById('modal-meta-grid');
+            metaGrid.innerHTML = '';
+
+            let metricsMatrix = [];
+            if (currentTab === 'Historical Archive (Inactives)') {
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Highest Level Met', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Peak Board Placement', val: player.col8 }
+                ];
+            } else if (currentTab === 'Active Major Leaguers') {
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Current Org', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Career MLB Stats', val: player.col8 }
+                ];
+            } else {
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Current Org', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Current Standing', val: player.col8 }
+                ];
+            }
+
+            metricsMatrix.forEach(metric => {
+                if (metric.val && metric.val.trim() !== "" && metric.val !== "None") {
+                    const block = document.createElement('div');
+                    block.className = 'bg-slate-950/60 p-3 rounded-lg border border-slate-800/80';
+                    block.innerHTML = `
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">${metric.label}</div>
+                        <div class="text-sm font-semibold text-slate-200 mt-0.5">${metric.val}</div>
+                    `;
+                    metaGrid.appendChild(block);
+                }
+            });
+
+            const modal = document.getElementById('player-modal');
+            const card = document.getElementById('modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
         }
 
         function closeModal() {
-            document.getElementById('player-modal').classList.add('opacity-0');
-            setTimeout(() => document.getElementById('player-modal').classList.add('hidden'), 250);
+            const modal = document.getElementById('player-modal');
+            const card = document.getElementById('modal-card');
+            modal.classList.add('opacity-0'); card.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 250);
+        }
+
+        function openAddPlayerModal() {
+            document.getElementById('form-target-tab').value = currentTab;
+            adaptFormLabels();
+            
+            const modal = document.getElementById('add-player-modal');
+            const card = document.getElementById('add-modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
+        }
+
+        function closeAddPlayerModal() {
+            const modal = document.getElementById('add-player-modal');
+            const card = document.getElementById('add-modal-card');
+            modal.classList.add('opacity-0'); card.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); document.getElementById('add-player-form').reset(); }, 250);
+        }
+
+        function adaptFormLabels() {
+            const selectedTab = document.getElementById('form-target-tab').value;
+            const labelCol4 = document.getElementById('label-col4');
+            const labelCol8 = document.getElementById('label-col8');
+            const inputCol8 = document.getElementById('form-col8');
+            const tierSelector = document.getElementById('form-tier');
+
+            tierSelector.innerHTML = '';
+
+            if (selectedTab === 'Historical Archive (Inactives)') {
+                labelCol4.innerText = "Highest Level Met";
+                labelCol8.innerText = "Peak Board Placement";
+                inputCol8.placeholder = "e.g., #15 Peak Prospect Standing";
+
+                const options = [
+                    "Tier 1: Major League Regulars / High-Impact Veterans",
+                    "Tier 2: Major League Depth / Up-and-Down Relievers",
+                    "Tier 3: Quad-A Lifers / International Expatriates",
+                    "Tier 4: Triple-A Stalwarts",
+                    "Tier 5: Double-A Advanced Corners",
+                    "Tier 6: Full-Season Single-A Anchors",
+                    "Tier 7: Complex League / Short-Season Stints"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
+            } else if (selectedTab === 'Active Major Leaguers') {
+                labelCol4.innerText = "Current Org";
+                labelCol8.innerText = "Career MLB Stats";
+                inputCol8.placeholder = "e.g., .254 AVG, 84 HR";
+
+                const options = [
+                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)",
+                    "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
+                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)",
+                    "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
+                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)",
+                    "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
+            } else {
+                labelCol4.innerText = "Current Org";
+                labelCol8.innerText = "Current Prospect Standing";
+                inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
+
+                const options = [
+                    "Tier 1: Elite / Near-Ready Impact",
+                    "Tier 2: Premium System Pillars",
+                    "Tier 3: Projected Major League Role Players",
+                    "Tier 4: High-Variance / Toolsy Sleepers",
+                    "Tier 5: Organizational Depth / Low-Minor Projects",
+                    "Tier 6: Pure International Professionals"
+                ];
+                options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+            }
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `Saving...`;
+
+            const targetTab = document.getElementById('form-target-tab').value;
+
+            if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 2) {
+                activeSheetSchemaKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
+            }
+
+            const pName = document.getElementById('form-name').value.trim();
+            const pTier = document.getElementById('form-tier').value;
+            const pScore = document.getElementById('form-score').value.trim();
+            const pCol4 = document.getElementById('form-col4').value.trim() || 'None';
+            const pCol5 = document.getElementById('form-col5').value.trim() || 'None';
+            const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
+            const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
+            const pNotes = document.getElementById('form-notes').value.trim() || '';
+            const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
+
+            const rowPayload = {};
+            
+            rowPayload[activeSheetSchemaKeys[0] || "field_1"] = ""; 
+            rowPayload[activeSheetSchemaKeys[1] || "Player"] = pName;
+            rowPayload[activeSheetSchemaKeys[2] || "Tier"] = pTier;
+            rowPayload[activeSheetSchemaKeys[3] || "Talent-to-Success Score"] = pScore;
+            rowPayload[activeSheetSchemaKeys[4] || "Current Org"] = pCol4;
+            rowPayload[activeSheetSchemaKeys[5] || "Past Orgs"] = pCol5;
+            rowPayload[activeSheetSchemaKeys[6] || "Drafted/Signed By"] = pCol6;
+            rowPayload[activeSheetSchemaKeys[7] || "All Orgs Search"] = pCol7;
+            rowPayload[activeSheetSchemaKeys[8] || "Current Prospect Standing"] = pCol8;
+            rowPayload[activeSheetSchemaKeys[9] || "Notes"] = pNotes;
+
+            try {
+                const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab)}`;
+                const response = await fetch(targetUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: [rowPayload] })
+                });
+
+                await response.json();
+                closeAddPlayerModal();
+                
+                if (currentTab === targetTab) {
+                    loadTabData(currentTab);
+                } else {
+                    switchTab(targetTab);
+                }
+            } catch (err) {
+                console.error("Write pipeline error:", err);
+                alert("Failed to write details to database. Confirm API settings.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
         }
 
         function switchTab(tabName) {
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200 cursor-pointer";
+            });
+
+            const activeId = 'btn-' + tabName.replace(/[^a-zA-Z]/g, "");
+            const activeBtn = document.getElementById(activeId);
+            if (activeBtn) {
+                activeBtn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white cursor-pointer";
+            }
+
             loadTabData(tabName);
         }
 
-        window.onload = () => switchTab('Active Prospects');
+        window.addEventListener('keydown', (e) => { 
+            if (e.key === 'Escape') { closeModal(); closeAddPlayerModal(); } 
+        });
+        
+        document.getElementById('player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('player-modal')) closeModal();
+        });
+        document.getElementById('add-player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('add-player-modal')) closeAddPlayerModal();
+        });
+
+        window.onload = () => {
+            switchTab('Active Prospects');
+        };
     </script>
 </body>
 </html>
