@@ -3,571 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talent-to-Success Database</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Talent-to-Success Player Database</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        :root {
-            --bg-dark: #0f172a;
-            --bg-deep: #1e293b;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-amber: #f59e0b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
+        .modal-transition {
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
-
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-        }
-
-        header {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .header-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        #portal-home {
-            text-align: center;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 0 0 10px 0;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 50px;
-            font-weight: 500;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        .category-card {
-            background-color: var(--bg-deep);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 35px 30px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 180px;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 4px; height: 100%;
-        }
-
-        .card-majors::before { background-color: var(--accent-green); }
-        .card-prospects::before { background-color: var(--accent-blue); }
-        .card-inactives::before { background-color: var(--accent-amber); }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            border-color: #475569;
-            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        .category-card h3 { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 700; }
-        .category-card p { margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
-        .card-arrow { align-self: flex-end; font-size: 1.2rem; color: var(--text-muted); transition: transform 0.2s ease; }
-        .category-card:hover .card-arrow { transform: translateX(5px); color: #ffffff; }
-
-        .category-panel { display: none; animation: fadeIn 0.4s ease; }
-        .panel-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 30px; }
-        
-        .btn {
-            background-color: var(--bg-deep);
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn:hover { background-color: #334155; border-color: #475569; }
-        .btn-primary { background-color: var(--accent-blue); border-color: var(--accent-blue); }
-        .btn-primary:hover { background-color: #2563eb; }
-
-        /* Real Data Grid Tables Architecture */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            background-color: var(--bg-deep);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.95rem;
-        }
-
-        th {
-            background-color: rgba(15, 23, 42, 0.6);
-            color: var(--text-muted);
-            padding: 16px 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        td {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-color);
-            line-height: 1.5;
-            vertical-align: top;
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background-color: rgba(51, 65, 85, 0.3); }
-
-        .badge-score {
-            display: inline-block;
-            background-color: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .loading-state {
-            padding: 60px 20px;
-            text-align: center;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            border-left-color: var(--accent-blue);
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px auto;
-        }
-
-        /* Modal Layout Window */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.8);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-            z-index: 1000; padding: 20px; box-sizing: border-box;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .modal-card {
-            background-color: var(--bg-deep);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            width: 100%; max-width: 550px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-            transform: translateY(20px); transition: transform 0.3s ease;
-            display: flex; flex-direction: column; max-height: 90vh;
-        }
-        .modal-overlay.active .modal-card { transform: translateY(0); }
-        
-        .modal-header { padding: 20px 25px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h2 { margin: 0; font-size: 1.3rem; font-weight: 700; }
-        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
-        .close-modal:hover { color: white; }
-
-        .modal-body { padding: 25px; overflow-y: auto; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; }
-        .form-control {
-            width: 100%; background-color: var(--bg-dark); border: 1px solid var(--border-color);
-            border-radius: 8px; padding: 12px; color: white; font-family: inherit; font-size: 0.95rem;
-            box-sizing: border-box; transition: border-color 0.2s;
-        }
-        .form-control:focus { outline: none; border-color: var(--accent-blue); }
-        textarea.form-control { resize: vertical; min-height: 80px; }
-        
-        .modal-footer { padding: 20px 25px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
-<header>
-    <div class="header-title" onclick="showHome()">Talent-to-Success Database</div>
-    <button class="btn btn-primary" onclick="openAddPlayerModal()">⚡ Add New Player</button>
-</header>
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                Talent-to-Success Database
+            </h1>
+            <nav class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                <button onclick="switchTab('Active Prospects')" id="btn-ActiveProspects" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white">
+                    Active Prospects
+                </button>
+                <button onclick="switchTab('Active Major Leaguers')" id="btn-ActiveMajorLeaguers" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                    Active MLB
+                </button>
+                <button onclick="switchTab('Historical Archive (Inactives)')" id="btn-HistoricalArchive" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                    Historical Archive
+                </button>
+            </nav>
+        </div>
+    </header>
 
-<div class="wrapper">
-    <div id="portal-home">
-        <h1>Talent-to-Success Database</h1>
-        <div class="subtitle">Select a player pool dimension to begin tracking or evaluating metrics</div>
-        <div class="grid-container">
-            <div class="category-card card-majors" onclick="openPanel('panel-majors')">
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Tab Header Title -->
+        <div class="mb-6 flex justify-between items-center">
+            <h2 id="current-tab-title" class="text-2xl font-semibold text-slate-200">Active Prospects</h2>
+            <div id="loading-indicator" class="text-sm text-blue-400 animate-pulse">Syncing data...</div>
+        </div>
+
+        <!-- Player Badges Grid Display -->
+        <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <!-- Dynamic players load here -->
+        </div>
+    </main>
+
+    <!-- POP-OUT DETAILS MODAL BOX -->
+    <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
+            
+            <div id="modal-accent-bar" class="h-2 w-full bg-blue-500"></div>
+            
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 id="modal-player-name" class="text-2xl font-bold text-white">Player Name</h3>
+                        <span id="modal-player-tier" class="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300">Tier Info</span>
+                    </div>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <hr class="border-slate-800 my-4">
+
+                <!-- Dynamic Info Matrix -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="modal-meta-grid">
+                    <!-- Metrics load dynamically -->
+                </div>
+
+                <!-- Scouting Profile Text Box -->
                 <div>
-                    <h3>Active Major Leaguers</h3>
-                    <p>Current active rosters, key analytics tracking, organization pipelines, and production data tiers.</p>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Scouting Reports & Notes</h4>
+                    <p id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto">
+                        Notes layout text goes here.
+                    </p>
                 </div>
-                <div class="card-arrow">Explore Pool ➔</div>
-            </div>
-            <div class="category-card card-prospects" onclick="openPanel('panel-prospects')">
-                <div>
-                    <h3>Active Prospects</h3>
-                    <p>Future projections, development milestones, evaluative scoring tiers, and system assignments.</p>
-                </div>
-                <div class="card-arrow">Explore Pool ➔</div>
-            </div>
-            <div class="category-card card-inactives" onclick="openPanel('panel-inactives')">
-                <div>
-                    <h3>Historical Archive (Inactives)</h3>
-                    <p>Historic system data, career milestones, historical evaluation baselines, and past organization archives.</p>
-                </div>
-                <div class="card-arrow">Explore Pool ➔</div>
             </div>
         </div>
     </div>
 
-    <div id="panel-majors" class="category-panel">
-        <div class="panel-header"><h2>Active Major Leaguers</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Tier</th>
-                        <th>Score</th>
-                        <th>Current Org</th>
-                        <th>Past Orgs</th>
-                        <th>Drafted By</th>
-                        <th>Career MLB Stats</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyMajors">
-                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!-- PIPELINE ARCHITECTURE LOGIC -->
+    <script>
+        // Single API Link Config
+        const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
+        let currentTab = 'Active Prospects';
+        let localPlayersCache = [];
 
-    <div id="panel-prospects" class="category-panel">
-        <div class="panel-header"><h2>Active Prospects</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Tier</th>
-                        <th>Score</th>
-                        <th>Current Org</th>
-                        <th>Past Orgs</th>
-                        <th>Drafted By</th>
-                        <th>Current Standing</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyProspects">
-                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="panel-inactives" class="category-panel">
-        <div class="panel-header"><h2>Historical Archive (Inactives)</h2><button class="btn" onclick="showHome()">← Back to Hub</button></div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Tier</th>
-                        <th>Score</th>
-                        <th>Highest Level</th>
-                        <th>Past Orgs</th>
-                        <th>Drafted By</th>
-                        <th>Peak Standing</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyInactives">
-                    <tr><td colspan="8" class="loading-state"><div class="spinner"></div>Connecting spreadsheet pipeline...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="playerModal" class="modal-overlay">
-    <div class="modal-card">
-        <div class="modal-header">
-            <h2>Add Player Profile</h2>
-            <button class="close-modal" onclick="closeAddPlayerModal()">&times;</button>
-        </div>
-        <form id="playerForm" action="YOUR_GOOGLE_FORM_POST_URL" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="playerSection">Target Section Pool</label>
-                    <select id="playerSection" class="form-control" onchange="adjustFormCriteria(this.value)">
-                        <option value="majors">Active Major Leaguers</option>
-                        <option value="prospects">Active Prospects</option>
-                        <option value="inactives">Historical Archive (Inactives)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="playerName">Player Name</label>
-                    <input type="text" id="playerName" name="entry.11111" class="form-control" placeholder="e.g., Jesús Made" required>
-                </div>
-                <div class="form-group">
-                    <label for="playerTier">Scouting Evaluation Tier</label>
-                    <input type="text" id="playerTier" name="entry.22222" class="form-control" placeholder="e.g., Tier 1: Elite / Near-Ready Impact">
-                </div>
-                <div class="form-group">
-                    <label for="playerScore">Talent-to-Success Score</label>
-                    <input type="number" step="0.1" id="playerScore" name="entry.32222" class="form-control" placeholder="e.g., 9.4">
-                </div>
-                <div class="form-group" id="dynamicGroupA">
-                    <label id="labelDynamicA" for="inputDynamicA">Current Org</label>
-                    <input type="text" id="inputDynamicA" name="entry.44444" class="form-control" placeholder="e.g., MIL">
-                </div>
-                <div class="form-group">
-                    <label for="playerPastOrgs">Past Orgs</label>
-                    <input type="text" id="playerPastOrgs" name="entry.55555" class="form-control" placeholder="e.g., None">
-                </div>
-                <div class="form-group">
-                    <label for="playerDrafted">Drafted/Signed By</label>
-                    <input type="text" id="playerDrafted" name="entry.66666" class="form-control" placeholder="e.g., MIL">
-                </div>
-                <div class="form-group" id="dynamicGroupB">
-                    <label id="labelDynamicB" for="inputDynamicB">Career MLB Stats</label>
-                    <input type="text" id="inputDynamicB" name="entry.77777" class="form-control" placeholder="e.g., .280 AVG, 6 HR Context">
-                </div>
-                <div class="form-group">
-                    <label for="playerNotes">Scouting Evaluation Notes</label>
-                    <textarea id="playerNotes" name="entry.88888" class="form-control" placeholder="Enter structural player notes..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" onclick="closeAddPlayerModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Player Profile</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-<script>
-    // Configuration Engine - Swap out with your live SheetDB API string token!
-    const SHEETDB_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
-
-    // Global Store to segment data chunks locally once read from master payload
-    let masterDatabaseRecords = [];
-
-    window.addEventListener('DOMContentLoaded', () => {
-        fetchSpreadsheetData();
-    });
-
-    async function fetchSpreadsheetData() {
-        if (SHEETDB_API_URL === 'YOUR_SHEETDB_API_URL') {
-            console.warn("SheetDB URL has not been connected yet. Operating in local preview layout mode.");
-            return;
-        }
-        try {
-            // Fetch records from all worksheet tabs exposed by your SheetDB connection bridge
-            const response = await fetch(SHEETDB_API_URL);
-            masterDatabaseRecords = await response.json();
-            renderAllTables();
-        } catch (error) {
-            console.error("Critical API data pipe failure:", error);
-            const errorMsg = "<tr><td colspan='8' style='color:#ef4444; text-align:center;'>Failed to synchronize spreadsheet record sets. Verify API status tokens.</td></tr>";
-            document.getElementById('tableBodyMajors').innerHTML = errorMsg;
-            document.getElementById('tableBodyProspects').innerHTML = errorMsg;
-            document.getElementById('tableBodyInactives').innerHTML = errorMsg;
-        }
-    }
-
-    function renderAllTables() {
-        // Clear layout rows before populating parsed inputs
-        const majorsBody = document.getElementById('tableBodyMajors');
-        const prospectsBody = document.getElementById('tableBodyProspects');
-        const inactivesBody = document.getElementById('tableBodyInactives');
-        
-        let majorsHTML = '';
-        let prospectsHTML = '';
-        let inactivesHTML = '';
-
-        masterDatabaseRecords.forEach(row => {
-            // Safe key resolution mapping against empty row allocations or cell variances
-            const player = row['Player'] || '';
-            if (!player.trim()) return; // Skip blank layout lines
-
-            const tier = row['Tier'] || 'Unassigned';
-            const score = row['Talent-to-Success Score'] || '—';
-            const pastOrgs = row['Past Orgs'] || 'None';
-            const draftedBy = row['Drafted/Signed By'] || '—';
-            const notes = row['Notes'] || '';
-
-            // Segment record chunks cleanly by scanning Sheet configuration headers or column flags
-            if (row.hasOwnProperty('Career MLB Stats') || ('Current Org' in row && !row.hasOwnProperty('Current Prospect Standing') && !row.hasOwnProperty('Highest Level'))) {
-                const currentOrg = row['Current Org'] || '—';
-                const stats = row['Career MLB Stats'] || '—';
-                majorsHTML += `<tr>
-                    <td><strong>${player}</strong></td>
-                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
-                    <td><span class="badge-score">${score}</span></td>
-                    <td>${currentOrg}</td>
-                    <td>${pastOrgs}</td>
-                    <td>${draftedBy}</td>
-                    <td style="font-family:monospace; font-size:0.85rem;">${stats}</td>
-                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
-                </tr>`;
-            } else if (row.hasOwnProperty('Current Prospect Standing')) {
-                const currentOrg = row['Current Org'] || '—';
-                const standing = row['Current Prospect Standing'] || '—';
-                prospectsHTML += `<tr>
-                    <td><strong>${player}</strong></td>
-                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
-                    <td><span class="badge-score">${score}</span></td>
-                    <td>${currentOrg}</td>
-                    <td>${pastOrgs}</td>
-                    <td>${draftedBy}</td>
-                    <td><span style="color:#60a5fa; font-weight:500;">${standing}</span></td>
-                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
-                </tr>`;
-            } else if (row.hasOwnProperty('Highest Level') || row.hasOwnProperty('Peak Prospect Standing')) {
-                const highestLevel = row['Highest Level'] || '—';
-                const peakStanding = row['Peak Prospect Standing'] || '—';
-                inactivesHTML += `<tr>
-                    <td><strong>${player}</strong></td>
-                    <td><span style="font-size:0.85rem; color:var(--text-muted);">${tier}</span></td>
-                    <td><span class="badge-score">${score}</span></td>
-                    <td>${highestLevel}</td>
-                    <td>${pastOrgs}</td>
-                    <td>${draftedBy}</td>
-                    <td>${peakStanding}</td>
-                    <td style="font-size:0.85rem; max-width:350px;">${notes}</td>
-                </tr>`;
+        // Dynamic Card / Badge Color Assignment
+        function getTierColor(tierString) {
+            if (!tierString) return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
+            const lower = tierString.toLowerCase();
+            
+            if (lower.includes('tier 1')) {
+                return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30', hex: '#f59e0b' };
+            } else if (lower.includes('tier 2')) {
+                return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', hex: '#10b981' };
+            } else if (lower.includes('tier 3')) {
+                return { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30', hex: '#3b82f6' };
+            } else if (lower.includes('tier 4')) {
+                return { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30', hex: '#a855f7' };
             }
+            return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
+        }
+
+        // Fetch Pipeline Engine 
+        async function loadTabData(tabName) {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const grid = document.getElementById('player-grid');
+            
+            loadingIndicator.classList.remove('hidden');
+            grid.innerHTML = ''; 
+
+            try {
+                // EXPLICIT SHEET ENCODING: Fixes SheetDB free tier skipping tabs with spaces
+                const cleanTabName = encodeURIComponent(tabName.trim());
+                const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}&offset=8`;
+                
+                const response = await fetch(targetUrl);
+                const data = await response.json();
+                
+                // Exclude broken layout strings or empty rows from processing
+                if (Array.isArray(data)) {
+                    localPlayersCache = data.filter(p => p.Player && p.Player.trim() !== "" && !p.Player.includes('#REF!'));
+                    renderPlayerBadges();
+                } else {
+                    throw new Error("SheetDB data payload is not standard matrix array");
+                }
+            } catch (error) {
+                console.error("Pipeline failure fetching SheetDB logs:", error);
+                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to synchronize sheet data lines. Verify that tab name match precisely inside Google Sheets.</div>`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        // Render minimalistic visual name badges
+        function renderPlayerBadges() {
+            const grid = document.getElementById('player-grid');
+            grid.innerHTML = '';
+
+            if (localPlayersCache.length === 0) {
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player profiles returned from this database tab.</div>`;
+                return;
+            }
+
+            localPlayersCache.forEach((player, index) => {
+                const colors = getTierColor(player.Tier);
+                
+                const badge = document.createElement('div');
+                badge.className = `p-3 rounded-xl border ${colors.bg} ${colors.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
+                badge.onclick = () => openModal(index);
+                
+                badge.innerHTML = `
+                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.Player}</div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider ${colors.text} truncate mt-1">
+                        ${player['Talent-to-Success Score'] ? 'Score: ' + player['Talent-to-Success Score'] : 'Unrated'}
+                    </div>
+                `;
+                grid.appendChild(badge);
+            });
+        }
+
+        // Display Pop-out Modal Details Box
+        function openModal(index) {
+            const player = localPlayersCache[index];
+            const colors = getTierColor(player.Tier);
+            
+            document.getElementById('modal-accent-bar').style.backgroundColor = colors.hex;
+            document.getElementById('modal-player-name').innerText = player.Player;
+            document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
+            document.getElementById('modal-player-tier').innerText = player.Tier || 'Unclassified Profile';
+            document.getElementById('modal-player-notes').innerText = player.Notes || 'No player scouting evaluation notes logged inside database row entries.';
+
+            // Generate field elements inside pop-out depending on active spreadsheet tab keys
+            const metaGrid = document.getElementById('modal-meta-grid');
+            metaGrid.innerHTML = '';
+
+            const dataKeys = [
+                { label: 'Talent-to-Success Score', val: player['Talent-to-Success Score'] },
+                { label: 'Current Org', val: player['Current Org'] },
+                { label: 'Drafted/Signed By', val: player['Drafted/Signed By'] },
+                { label: 'Past Orgs', val: player['Past Orgs'] },
+                { label: 'All Orgs Search', val: player['All Orgs Search'] },
+                { label: 'Current Standing', val: player['Current Prospect Standing'] },
+                { label: 'Career MLB Stats', val: player['Career MLB Stats'] },
+                { label: 'Highest Level Met', val: player['Highest Level'] },
+                { label: 'Peak Board Placement', val: player['Peak Prospect Standing'] }
+            ];
+
+            dataKeys.forEach(metric => {
+                // Only print blocks if the data point exists and isn't a filler 'None' string
+                if (metric.val && metric.val.trim() !== "" && metric.val !== "None" && !metric.val.includes('#REF!')) {
+                    const block = document.createElement('div');
+                    block.className = 'bg-slate-950/60 p-3 rounded-lg border border-slate-800/80';
+                    block.innerHTML = `
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">${metric.label}</div>
+                        <div class="text-sm font-semibold text-slate-200 mt-0.5">${metric.val}</div>
+                    `;
+                    metaGrid.appendChild(block);
+                }
+            });
+
+            // Slide out animation
+            const modal = document.getElementById('player-modal');
+            const card = document.getElementById('modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('player-modal');
+            const card = document.getElementById('modal-card');
+            
+            modal.classList.add('opacity-0');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        // Global Navigation Tab Manager
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('current-tab-title').innerText = tabName;
+            
+            // Clear navigation button states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200";
+            });
+
+            // Set styling highlight on current active tab selection
+            const activeId = 'btn-' + tabName.replace(/[^a-zA-Z]/g, "");
+            const activeBtn = document.getElementById(activeId);
+            if (activeBtn) {
+                activeBtn.className = "px-4 py-2 text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white";
+            }
+
+            loadTabData(tabName);
+        }
+
+        // Window Listener events for modal closing
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('player-modal')) closeModal();
         });
 
-        majorsBody.innerHTML = majorsHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No active Major League records mapped.</td></tr>";
-        prospectsBody.innerHTML = prospectsHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No active Prospect records mapped.</td></tr>";
-        inactivesBody.innerHTML = inactivesHTML || "<tr><td colspan='8' style='text-align:center; color:var(--text-muted);'>No archival record frames found.</td></tr>";
-    }
-
-    // View Navigation Scripts
-    function openPanel(panelId) {
-        document.getElementById('portal-home').style.display = 'none';
-        document.getElementById(panelId).style.display = 'block';
-    }
-
-    function showHome() {
-        document.querySelectorAll('.category-panel').forEach(panel => panel.style.display = 'none');
-        document.getElementById('portal-home').style.display = 'block';
-    }
-
-    function openAddPlayerModal() {
-        document.getElementById('playerModal').classList.add('active');
-    }
-
-    function closeAddPlayerModal() {
-        document.getElementById('playerModal').classList.remove('active');
-        document.getElementById('playerForm').reset();
-        adjustFormCriteria('majors');
-    }
-
-    // Dynamic Context Switcher Engine mapping column attributes directly to spreadsheet structures
-    function adjustFormCriteria(selectedSection) {
-        const labelA = document.getElementById('labelDynamicA');
-        const inputA = document.getElementById('inputDynamicA');
-        const labelB = document.getElementById('labelDynamicB');
-        const inputB = document.getElementById('inputDynamicB');
-
-        if (selectedSection === 'majors') {
-            labelA.innerText = "Current Org";
-            inputA.placeholder = "e.g., ATL";
-            labelB.innerText = "Career MLB Stats";
-            inputB.placeholder = "e.g., .227 / .324 / .748 / 93 HR / 285 RBI";
-        } else if (selectedSection === 'prospects') {
-            labelA.innerText = "Current Org";
-            inputA.placeholder = "e.g., MIL";
-            labelB.innerText = "Current Prospect Standing";
-            inputB.placeholder = "e.g., #1 Prospect in Baseball (2026)";
-        } else if (selectedSection === 'inactives') {
-            labelA.innerText = "Highest Level Achieved";
-            inputA.placeholder = "e.g., Triple-A";
-            labelB.innerText = "Peak Prospect Standing";
-            inputB.placeholder = "e.g., Historic 9-Position Single-Game Player";
-        }
-    }
-
-    function handleFormSubmit(e) {
-        alert("Player profile data sent directly to spreadsheet ingestion pipeline!");
-        closeAddPlayerModal();
-        // Give Google Sheets 2-3 seconds to ingest before refetching tables automatically
-        setTimeout(fetchSpreadsheetData, 2500);
-    }
-</script>
-
+        // App Entry Initialization point
+        window.onload = () => {
+            switchTab('Active Prospects');
+        };
+    </script>
 </body>
 </html>
