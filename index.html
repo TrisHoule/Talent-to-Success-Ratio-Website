@@ -32,7 +32,6 @@
                         Historical Archive
                     </button>
                 </nav>
-                <!-- Action Trigger for Add Player -->
                 <button onclick="openAddPlayerModal()" class="w-full sm:w-auto px-4 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Add Player
@@ -42,13 +41,11 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Section Header Info -->
         <div class="mb-6 flex justify-between items-center">
             <h2 id="current-tab-title" class="text-2xl font-semibold text-slate-200">Active Prospects</h2>
             <div id="loading-indicator" class="text-sm text-blue-400 animate-pulse">Syncing data...</div>
         </div>
 
-        <!-- Player Data Badges Target Grid -->
         <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             <!-- Dynamic items mount here -->
         </div>
@@ -92,7 +89,6 @@
                 
                 <form id="add-player-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Destination Target Tab Selector -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Spreadsheet Tab</label>
                             <select id="form-target-tab" onchange="adaptFormLabels()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
@@ -101,7 +97,6 @@
                                 <option value="Historical Archive (Inactives)">Historical Archive (Inactives)</option>
                             </select>
                         </div>
-                        <!-- Player Identity Name -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Player Full Name</label>
                             <input type="text" id="form-name" required placeholder="e.g., Dylan Crews" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
@@ -109,7 +104,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Quality Tier Category Placement -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
@@ -119,7 +113,6 @@
                                 <option value="Tier 4: Triple-A Stalwarts">Tier 4: Triple-A Stalwarts</option>
                             </select>
                         </div>
-                        <!-- Metrics Grade Rating -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Talent-to-Success Score</label>
                             <input type="number" step="0.1" min="0" max="10" id="form-score" placeholder="e.g., 7.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
@@ -127,33 +120,28 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <!-- Context Column 4 Variable Label -->
                         <div>
                             <label id="label-col4" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Org</label>
                             <input type="text" id="form-col4" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
                         </div>
-                        <!-- Past Affiliations Context Column 5 -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Past Orgs</label>
                             <input type="text" id="form-col5" placeholder="e.g., LAD, BOS (or None)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
                         </div>
-                        <!-- Acquisition Source Column 6 -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Drafted/Signed By</label>
                             <input type="text" id="form-col6" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
 
-                    <!-- Standing Metric Information Column 8 -->
                     <div>
                         <label id="label-col8" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Prospect Standing</label>
                         <input type="text" id="form-col8" placeholder="e.g., #4 Prospect in Baseball (2026)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
                     </div>
 
-                    <!-- Evaluation Descriptive Block Paragraphs Column 9 -->
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Scouting Reports & Performance Notes</label>
-                        <textarea id="form-notes" rows="4" placeholder="Log extensive multi-tier metric values, tools evaluation parameters, and layout text here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"></p>
+                        <textarea id="form-notes" rows="4" placeholder="Log extensive descriptive profile summaries here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"></textarea>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-2">
@@ -167,12 +155,12 @@
         </div>
     </div>
 
-    <!-- CORE DASHBOARD JAVASCRIPT ARCHITECTURE ENGINE -->
+    <!-- CORE SYSTEM PIPELINE ARCHITECTURE -->
     <script>
         const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
-        let activeSheetSchemaKeys = []; // Stores the structural layout schema tags pulled from SheetDB raw lines
+        let activeSheetSchemaKeys = []; 
 
         function parseCleanText(rawString) {
             if (!rawString || rawString === "undefined" || rawString === "null") return "";
@@ -210,7 +198,7 @@
                 const data = await response.json();
                 
                 if (Array.isArray(data) && data.length > 0) {
-                    // CACHE THE EXACT SCHEMA KEYS FOR THIS TAB: Bypasses header misalignments entirely
+                    // Pull whatever exact keys SheetDB gave us for this row
                     activeSheetSchemaKeys = Object.keys(data[0]);
 
                     data.forEach(row => {
@@ -274,7 +262,7 @@
             document.getElementById('modal-player-name').innerText = player.name;
             document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
             document.getElementById('modal-player-tier').innerText = player.tier || 'Unclassified Profile';
-            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged in database lines.';
+            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged.';
 
             const metaGrid = document.getElementById('modal-meta-grid');
             metaGrid.innerHTML = '';
@@ -331,10 +319,7 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 250);
         }
 
-        /* --- ADD NEW PLAYER DATA PIPELINE CONTROLLERS --- */
-        
         function openAddPlayerModal() {
-            // Match form's starting target option to the layout tab the viewer is looking at
             document.getElementById('form-target-tab').value = currentTab;
             adaptFormLabels();
             
@@ -351,7 +336,6 @@
             setTimeout(() => { modal.classList.add('hidden'); document.getElementById('add-player-form').reset(); }, 250);
         }
 
-        // Dynamically morph form field text prompts relative to the chosen database destination tab
         function adaptFormLabels() {
             const selectedTab = document.getElementById('form-target-tab').value;
             const labelCol4 = document.getElementById('label-col4');
@@ -365,7 +349,7 @@
             } else if (selectedTab === 'Active Major Leaguers') {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Career MLB Stats";
-                inputCol8.placeholder = "e.g., .254 AVG, 84 HR, 4.2 bWAR";
+                inputCol8.placeholder = "e.g., .254 AVG, 84 HR";
             } else {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Current Prospect Standing";
@@ -373,26 +357,21 @@
             }
         }
 
-        // POST Request Pipeline Execution
         async function handleFormSubmit(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submit-btn');
             const originalBtnText = submitBtn.innerHTML;
             
-            // UI Visual Loading State lock
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Appending Record...`;
+            submitBtn.innerHTML = `Saving...`;
 
             const targetTab = document.getElementById('form-target-tab').value;
 
-            // Check if application synchronized layout tags successfully before attempting structural write back
-            if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 10) {
-                alert("Database schema tags unverified. Switch view panels once to synchronize data headers before recording additions.");
-                submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText;
-                return;
+            // Fallback generation logic if keys are missing from a blank sheet fetch
+            if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 2) {
+                activeSheetSchemaKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
             }
 
-            // Read raw values directly from interactive form inputs
             const pName = document.getElementById('form-name').value.trim();
             const pTier = document.getElementById('form-tier').value;
             const pScore = document.getElementById('form-score').value.trim();
@@ -401,24 +380,21 @@
             const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
             const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
             const pNotes = document.getElementById('form-notes').value.trim() || '';
-
-            // Compute automated relational text search parameters matching your Sheet's structure
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // BUILD THE EXPLICIT DYNAMIC ROW PAYLOAD OBJECT
             const rowPayload = {};
             
-            // Map form attributes precisely to the corresponding internal Column Header fields SheetDB generated
-            rowPayload[activeSheetSchemaKeys[0]] = ""; // Left padding tracking column index 
-            rowPayload[activeSheetSchemaKeys[1]] = pName;
-            rowPayload[activeSheetSchemaKeys[2]] = pTier;
-            rowPayload[activeSheetSchemaKeys[3]] = pScore;
-            rowPayload[activeSheetSchemaKeys[4]] = pCol4;
-            rowPayload[activeSheetSchemaKeys[5]] = pCol5;
-            rowPayload[activeSheetSchemaKeys[6]] = pCol6;
-            rowPayload[activeSheetSchemaKeys[7]] = pCol7;
-            rowPayload[activeSheetSchemaKeys[8]] = pCol8;
-            rowPayload[activeSheetSchemaKeys[9]] = pNotes;
+            // Map inputs structurally by absolute position index matching the keys SheetDB handles
+            rowPayload[activeSheetSchemaKeys[0] || "field_1"] = ""; 
+            rowPayload[activeSheetSchemaKeys[1] || "Player"] = pName;
+            rowPayload[activeSheetSchemaKeys[2] || "Tier"] = pTier;
+            rowPayload[activeSheetSchemaKeys[3] || "Talent-to-Success Score"] = pScore;
+            rowPayload[activeSheetSchemaKeys[4] || "Current Org"] = pCol4;
+            rowPayload[activeSheetSchemaKeys[5] || "Past Orgs"] = pCol5;
+            rowPayload[activeSheetSchemaKeys[6] || "Drafted/Signed By"] = pCol6;
+            rowPayload[activeSheetSchemaKeys[7] || "All Orgs Search"] = pCol7;
+            rowPayload[activeSheetSchemaKeys[8] || "Current Prospect Standing"] = pCol8;
+            rowPayload[activeSheetSchemaKeys[9] || "Notes"] = pNotes;
 
             try {
                 const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab)}`;
@@ -431,30 +407,23 @@
                     body: JSON.stringify({ data: [rowPayload] })
                 });
 
-                const result = await response.json();
-
-                // SheetDB outputs success metrics object with an created row confirmation integer
-                if (result.created === 1 || result.success || (result.data && result.data.length > 0)) {
-                    closeAddPlayerModal();
-                    // Instant live viewport refresh update loop logic
-                    if (currentTab === targetTab) {
-                        loadTabData(currentTab);
-                    } else {
-                        switchTab(targetTab);
-                    }
+                await response.json();
+                closeAddPlayerModal();
+                
+                if (currentTab === targetTab) {
+                    loadTabData(currentTab);
                 } else {
-                    throw new Error("SheetDB API rejected row insertion logs.");
+                    switchTab(targetTab);
                 }
             } catch (err) {
                 console.error("Write pipeline error:", err);
-                alert("Failed to write data records back to Google Sheets. Verify system configurations inside SheetDB control hubs.");
+                alert("Failed to write details to database. Confirm API settings.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
             }
         }
 
-        /* --- GLOBAL NAVIGATION TAB MANAGER --- */
         function switchTab(tabName) {
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
