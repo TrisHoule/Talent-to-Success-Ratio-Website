@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .modal-transition {
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
+        /* Custom scrollbar for modern premium dark styling */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -26,6 +28,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
 
+    <!-- Header Navigation Bar -->
     <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -59,7 +62,9 @@
         </div>
     </header>
 
+    <!-- Main Content Grid -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <!-- Dashboard Statistics and Search Component -->
         <div class="bg-slate-900/40 p-5 rounded-2xl border border-slate-900 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
             <div class="relative flex-grow max-w-lg">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -73,6 +78,7 @@
             </div>
         </div>
 
+        <!-- Section Title and Sync Info -->
         <div class="mb-6 flex justify-between items-center">
             <h2 id="current-tab-title" class="text-2xl font-black tracking-tight text-white">Active Prospects</h2>
             <div id="loading-indicator" class="text-sm text-blue-400 flex items-center gap-2 hidden">
@@ -81,10 +87,13 @@
             </div>
         </div>
 
+        <!-- Player Card Grid with custom adaptive layouts -->
         <div id="player-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            </div>
+            <!-- Dynamic items mount here -->
+        </div>
     </main>
 
+    <!-- Unified Toast Message System -->
     <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 transition-all duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-2xl flex gap-3 items-start hidden">
         <div class="p-1 rounded-lg" id="toast-icon"></div>
         <div class="flex-grow">
@@ -93,6 +102,7 @@
         </div>
     </div>
 
+    <!-- DETAILS MODAL PANEL -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
             <div id="modal-accent-bar" class="h-2 w-full"></div>
@@ -116,6 +126,7 @@
         </div>
     </div>
 
+    <!-- DATA WRITER CONFIG MODAL -->
     <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
             <div class="h-2 w-full bg-emerald-500"></div>
@@ -147,7 +158,8 @@
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
-                                </select>
+                                <!-- JavaScript options injected dynamically -->
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Talent-to-Success Score</label>
@@ -191,12 +203,13 @@
         </div>
     </div>
 
+    <!-- SYNC SETTINGS CONFIG -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 modal-transition" id="settings-card">
             <div class="h-2 w-full bg-blue-500"></div>
             <div class="p-6">
                 <h3 class="text-xl font-extrabold text-white mb-2">Configure Connection API</h3>
-                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch and save directly into your Google Sheet's optimized flat API tables.</p>
+                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch and save dynamically directly into your Google Sheet's optimized flat API tables.</p>
                 
                 <div class="space-y-4">
                     <div>
@@ -207,12 +220,13 @@
                 
                 <div class="flex justify-end gap-3 pt-6 border-t border-slate-800 mt-6">
                     <button onclick="useLocalFallback()" class="px-4 py-2 text-xs font-bold bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-xl transition cursor-pointer">Disconnect / Clear Cache</button>
-                    <button onclick="saveApiSettings()" class="px-5 py-2.5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition shadow-md cursor-pointer">Save Connection</button>
+                    <button onclick="saveApiSettings()" class="px-5 py-2.5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition shadow-md cursor-pointer">Save Connection</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- App Footer Banner -->
     <footer class="border-t border-slate-900 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
@@ -223,55 +237,64 @@
         </div>
     </footer>
 
+    <!-- INTERACTIVE SCRIPTS & DATA CORE -->
     <script>
+        // Storage configuration lookup
         let BASE_API_URL = localStorage.getItem('sheetdb_api_url') || '';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        // Direct flat backend worksheet keys map configuration 
+        // Dynamic API sheet router mapping table - routes queries to custom Flat API sub-sheets
         const backendSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
-        // Highly recognizable glowing bold color palettes
+        // Deep Neon Color Palette Core - Bold and highly recognizable glowing color markers
         function getTierColor(tabName, tierString) {
-            const defaultColor = '#94a3b8';
+            const defaultColor = '#94a3b8'; // Fallback slate
             if (!tierString) return defaultColor;
             
             const cleanTier = tierString.toLowerCase().replace(/\(.*?\)/g, '').trim();
             const lowerTab = tabName.toLowerCase();
 
+            // 1. ACTIVE PROSPECTS
             if (lowerTab.includes('prospects')) {
-                if (cleanTier.includes('tier 1')) return '#10b981'; // Emerald Green
+                if (cleanTier.includes('tier 1')) return '#10b981'; // Vibrant Emerald
                 if (cleanTier.includes('tier 2')) return '#3b82f6'; // Electric Blue
                 if (cleanTier.includes('tier 3')) return '#eab308'; // Bright Gold
-                if (cleanTier.includes('tier 4')) return '#f97316'; // Orange
+                if (cleanTier.includes('tier 4')) return '#f97316'; // Neon Orange
                 if (cleanTier.includes('tier 5')) return '#ec4899'; // Hot Pink
-                if (cleanTier.includes('tier 6')) return '#06b6d4'; // Cyan
+                if (cleanTier.includes('tier 6')) return '#06b6d4'; // Bright Cyan
             }
+            
+            // 2. ACTIVE MAJOR LEAGUERS
             if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
-                if (cleanTier.includes('tier 1')) return '#2563eb'; // Royal Blue
-                if (cleanTier.includes('tier 2')) return '#0284c7'; // Sky Blue
+                if (cleanTier.includes('tier 1')) return '#2563eb'; // Deep Royal
+                if (cleanTier.includes('tier 2')) return '#0284c7'; // Sky Command Blue
                 if (cleanTier.includes('tier 3')) return '#8b5cf6'; // Vivid Purple
-                if (cleanTier.includes('tier 4')) return '#f59e0b'; // Amber Gold
-                if (cleanTier.includes('tier 5')) return '#64748b'; // Steel Gray
-                if (cleanTier.includes('tier 6')) return '#b45309'; // Dark Burnt Orange
+                if (cleanTier.includes('tier 4')) return '#f59e0b'; // Saturated Amber
+                if (cleanTier.includes('tier 5')) return '#64748b'; // Steel Slate
+                if (cleanTier.includes('tier 6')) return '#b45309'; // Burnt Bronze
             }
+
+            // 3. HISTORICAL ARCHIVE
             if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
-                if (cleanTier.includes('tier 1')) return '#ef4444'; // Crimson Red
-                if (cleanTier.includes('tier 2')) return '#f43f5e'; // Rose
-                if (cleanTier.includes('tier 3')) return '#14b8a6'; // Teal
-                if (cleanTier.includes('tier 4')) return '#a855f7'; // Orchid Violet
+                if (cleanTier.includes('tier 1')) return '#ef4444'; // Bold Crimson
+                if (cleanTier.includes('tier 2')) return '#f43f5e'; // Soft Coral Rose
+                if (cleanTier.includes('tier 3')) return '#14b8a6'; // Deep Saturated Teal
+                if (cleanTier.includes('tier 4')) return '#a855f7'; // Violet Orchid
                 if (cleanTier.includes('tier 5')) return '#65a30d'; // Olive Lime
-                if (cleanTier.includes('tier 6')) return '#475569'; // Dark Slate
-                if (cleanTier.includes('tier 7')) return '#cbd5e1'; // Platinum Silver
+                if (cleanTier.includes('tier 6')) return '#475569'; // Muted Dark Slate
+                if (cleanTier.includes('tier 7')) return '#cbd5e1'; // Stark Platinum Silver
             }
+
             return defaultColor;
         }
 
+        // Clean text parser - strips hyperlink parameters and template offsets
         function cleanString(rawString) {
             if (!rawString || rawString === "undefined" || rawString === "null") return "";
             let text = String(rawString).trim();
@@ -282,7 +305,7 @@
             return text;
         }
 
-        // Extracts properties safely matching your flat layout columns directly by key text
+        // Positional robust row data reader - parses columns even if their spreadsheet headers have custom capitalization
         function normalizeRowData(row) {
             const getVal = (possibleKeys, fallbackVal = "") => {
                 for (let k of possibleKeys) {
@@ -307,20 +330,26 @@
             };
         }
 
-        // Standalone Core Data Directory Backups
+        // Local Directory Cache - Loaded immediately when BASE_API_URL is empty
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features premium barrel manipulation and plus-plus projectable raw power." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features 65-grade power with 70-grade rocket arm speed. Destroyed DSL in 2024 before fast-tracking inside Double-A Biloxi at age 18." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features 60-grade barrel manipulation and plus-plus 65-grade raw power." },
+            { name: "Francisco Renteria", tier: "Tier 4: High-Variance / Toolsy Sleepers", score: "4.8", col4: "PHI", col5: "None", col6: "PHI", col7: "PHI, None, PHI", col8: "Phillies #3 Prospect (2026)", notes: "Physically imposing outfielder signed for $4 million in January 2026. Possesses spectacular, raw power projection and elite bat speed." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR", notes: "Premium right-handed hitting catcher originally selected by Oakland. Features carrying 70-grade arm speed balanced by elite defensive game-calling frame mechanics." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR", notes: "Premier right-handed hitting catcher originally selected by Oakland. Features plus raw power with elite receiving, game calling, and framing skills." },
+            { name: "Samad Taylor", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.6", col4: "SD", col5: "CLE, TOR, KC, SEA", col6: "CLE", col7: "SD, CLE, TOR, KC, SEA", col8: ".248 / .313 / .640 / 1 HR", notes: "Fast, versatile utility player with experience at second base and in the outfield. Signed by San Diego after electing free agency in January." },
+            { name: "Bryan King", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.2", col4: "HOU", col5: "None", col6: "CHC", col7: "HOU, None, CHC", col8: "2.60 ERA / 125 SO / 1.12 WHIP", notes: "Left-handed reliever selected by Chicago before emerging in Houston. Weaponizes a running sinker and sweeping low-80s slider." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "High-IQ infielder and former University of Iowa captain who famously played all nine defensive positions in a single game for High-A Carolina in 2012." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who became a legendary organizational asset within Cleveland's chain. Famously played all nine defensive positions in a single game." },
+            { name: "Alberto Bastardo", tier: "Tier 4: Triple-A Stalwarts", score: "4.7", col4: "Triple-A", col5: "BAL, LAD, MIA", col6: "BAL", col7: "BAL, BAL, LAD, MIA", col8: "Peak: Triple-A Albuquerque Rotation Asset", notes: "Left-handed starter who logged over 920 professional innings and led the Venezuelan Winter League in ERA during the 2009-2010 season." },
+            { name: "Chevy Clarke", tier: "Tier 7: Complex League / Short-Season Stints", score: "2.0", col4: "Rookie / Short-Season", col5: "LAA", col6: "LAA", col7: "LAA, LAA", col8: "30th overall pick in 2010 Draft", notes: "Highly touted first-round draft pick. Blessed with double-plus raw power but contact issues ultimately stalled his progression." }
         ];
 
+        // Fetch API Handler - reads directly from your new API-optimized sheets
         async function loadTabData(tabName) {
             const loadingIndicator = document.getElementById('loading-indicator');
             const grid = document.getElementById('player-grid');
@@ -329,6 +358,8 @@
             filteredPlayersCache = [];
 
             if (!BASE_API_URL) {
+                // Instantly load local memory configurations
+                showToast("Offline Directory", "Viewing cached local player database.", "emerald");
                 document.getElementById('data-source-badge').innerText = "Offline Mode";
                 document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20";
                 
@@ -342,6 +373,10 @@
                     const localSaved = JSON.parse(localStorage.getItem('added_historical')) || [];
                     localPlayersCache = [...localHistorical, ...localSaved];
                 }
+                
+                // Sort descending by Talent-to-Success Score (converting score string to float)
+                localPlayersCache.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
+                
                 filteredPlayersCache = [...localPlayersCache];
                 renderPlayerBadges();
                 return;
@@ -349,12 +384,14 @@
 
             loadingIndicator.classList.remove('hidden');
             grid.innerHTML = '';
-            document.getElementById('data-source-badge').innerText = "Querying live endpoint...";
+            document.getElementById('data-source-badge').innerText = "Routing cloud query...";
             document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 animate-pulse";
 
             try {
+                // Explicitly pull from the SheetDB flat API sub-sheets
                 const targetSheet = backendSheetMap[tabName] || tabName;
-                const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetSheet.trim())}`;
+                const cleanTabName = encodeURIComponent(targetSheet.trim());
+                const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}`;
                 
                 const response = await fetch(targetUrl);
                 const data = await response.json();
@@ -366,16 +403,19 @@
                         localPlayersCache.push(playerObj);
                     });
                     
+                    // Sort descending by Talent-to-Success Score
+                    localPlayersCache.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
+                    
                     filteredPlayersCache = [...localPlayersCache];
-                    document.getElementById('data-source-badge').innerText = "Live Cloud Sync Active";
+                    document.getElementById('data-source-badge').innerText = "Database Connected";
                     document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     renderPlayerBadges();
                 } else {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but flat sheet section "${targetSheet}" returned no entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">API synced, but target sheet "${targetSheet}" contains no data rows.</div>`;
                 }
             } catch (error) {
-                console.error("API Read Error:", error);
-                showToast("Connection Error", "Could not read sheet headers. Using localized backup.", "red");
+                console.error("API Read Failure:", error);
+                showToast("Connection Error", "Could not reach database API. Reverting to local cache.", "red");
                 BASE_API_URL = '';
                 loadTabData(tabName);
             } finally {
@@ -383,14 +423,15 @@
             }
         }
 
+        // Render card interfaces using custom thick borders and inset glows
         function renderPlayerBadges() {
             const grid = document.getElementById('player-grid');
             grid.innerHTML = '';
             
-            document.getElementById('player-count').innerText = `${filteredPlayersCache.length} Players Directory`;
+            document.getElementById('player-count').innerText = `${filteredPlayersCache.length} Players Listed`;
 
             if (filteredPlayersCache.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">No matching metrics discovered.</div>`;
+                grid.innerHTML = `<div class="col-span-full p-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">No matching records found.</div>`;
                 return;
             }
 
@@ -398,10 +439,15 @@
                 const hexColor = getTierColor(currentTab, player.tier);
                 const badge = document.createElement('div');
                 
+                // Deep dark premium container setup
                 badge.className = `p-5 bg-slate-900/90 rounded-2xl hover:scale-[1.03] hover:-translate-y-1 cursor-pointer transition-all duration-300 flex flex-col justify-between h-32 relative group overflow-hidden shadow-xl`;
+                
+                // 2px Solid Custom Border
                 badge.style.borderColor = hexColor;
                 badge.style.borderWidth = '2px';
                 badge.style.borderStyle = 'solid';
+                
+                // Neon Shadow ambient light emit
                 badge.style.boxShadow = `0 0 16px -2px ${hexColor}50, inset 0 0 10px -4px ${hexColor}30`;
                 badge.onclick = () => openModal(index);
                 
@@ -419,12 +465,14 @@
                         <span>${player.score ? 'Score: ' + player.score : 'Unrated'}</span>
                         <svg class="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                     </div>
+                    <!-- Hover ambient background overlay -->
                     <div class="absolute -right-8 -bottom-8 w-24 h-24 rounded-full opacity-0 group-hover:opacity-10 transition duration-500 blur-xl" style="background-color: ${hexColor}"></div>
                 `;
                 grid.appendChild(badge);
             });
         }
 
+        // Search algorithm
         function handleSearch() {
             const query = document.getElementById('search-bar').value.toLowerCase().trim();
             if (query === '') {
@@ -443,6 +491,7 @@
             renderPlayerBadges();
         }
 
+        // Open detail display window
         function openModal(index) {
             const player = filteredPlayersCache[index];
             const hexColor = getTierColor(currentTab, player.tier);
@@ -513,6 +562,7 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 200);
         }
 
+        // Save Record Handler - Direct-post mapping optimized for SheetDB API Flat sheets
         async function handleFormSubmit(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submit-btn');
@@ -523,6 +573,7 @@
 
             const targetTab = document.getElementById('form-target-tab').value;
 
+            // Gather elements cleanly
             const pName = document.getElementById('form-name').value.trim();
             const pTier = document.getElementById('form-tier').value;
             const pScore = document.getElementById('form-score').value.trim();
@@ -533,6 +584,7 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
+            // Build payload mapped directly to the neat API_ column keys
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
                 rowPayload = {
@@ -558,7 +610,7 @@
                     "Career MLB Stats": pCol8,
                     "Notes": pNotes
                 };
-            } else {
+            } else { // Historical Archive
                 rowPayload = {
                     "Player": pName,
                     "Tier": pTier,
@@ -572,6 +624,7 @@
                 };
             }
 
+            // Fallback writing path if API is inactive
             if (!BASE_API_URL) {
                 let storageKey = 'added_prospects';
                 if (targetTab === 'Active Major Leaguers') storageKey = 'added_mlb';
@@ -579,11 +632,19 @@
 
                 let currentAdded = JSON.parse(localStorage.getItem(storageKey)) || [];
                 currentAdded.push({
-                    name: pName, tier: pTier, score: pScore, col4: pCol4, col5: pCol5, col6: pCol6, col7: pCol7, col8: pCol8, notes: pNotes
+                    name: pName,
+                    tier: pTier,
+                    score: pScore,
+                    col4: pCol4,
+                    col5: pCol5,
+                    col6: pCol6,
+                    col7: pCol7,
+                    col8: pCol8,
+                    notes: pNotes
                 });
                 localStorage.setItem(storageKey, JSON.stringify(currentAdded));
 
-                showToast("Success", `${pName} logged to local storage memory backup.`, "emerald");
+                showToast("Success", `${pName} logged to local storage memory.`, "emerald");
                 closeAddPlayerModal();
                 
                 if (currentTab === targetTab) {
@@ -598,6 +659,7 @@
             }
 
             try {
+                // Route target URL to the custom flat backend API sheet
                 const backendSheet = backendSheetMap[targetTab] || targetTab;
                 const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(backendSheet.trim())}`;
                 
@@ -613,7 +675,7 @@
                 const result = await response.json();
                 
                 if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} appended straight into table row!`, "emerald");
+                    showToast("Success", `${pName} successfully synchronized to "${backendSheet}" sheet!`, "emerald");
                     closeAddPlayerModal();
                     
                     setTimeout(() => {
@@ -624,17 +686,18 @@
                         }
                     }, 400);
                 } else {
-                    showToast("API Sync Error", "The sheet rejected data headers.", "red");
+                    showToast("API Error", "The database rejected form headers.", "red");
                 }
             } catch (err) {
-                console.error("Write execution error:", err);
-                showToast("Connection Lost", "Saved to local cache storage pipeline.", "yellow");
+                console.error("Write error:", err);
+                showToast("Connection Interrupted", "Saved securely to local offline memory.", "yellow");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
             }
         }
 
+        // Tab and display management
         function switchTab(tabName) {
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
@@ -726,6 +789,7 @@
             }
         }
 
+        // Settings Dialog Management
         function openSettingsModal() {
             document.getElementById('api-endpoint-input').value = BASE_API_URL;
             const modal = document.getElementById('settings-modal');
@@ -747,6 +811,7 @@
                 alert("Please paste a valid SheetDB URL endpoint starting with https://");
                 return;
             }
+            
             BASE_API_URL = val;
             localStorage.setItem('sheetdb_api_url', val);
             closeSettingsModal();
@@ -762,6 +827,7 @@
             switchTab(currentTab);
         }
 
+        // Global Toast Notifications
         function showToast(title, message, color) {
             const toast = document.getElementById('toast-notification');
             const toastTitle = document.getElementById('toast-title');
@@ -795,14 +861,24 @@
             }, 4000);
         }
 
+        // Modal and Backdrop Controls
         window.addEventListener('keydown', (e) => { 
             if (e.key === 'Escape') { closeModal(); closeAddPlayerModal(); closeSettingsModal(); } 
         });
-        document.getElementById('player-modal').addEventListener('click', (e) => { if (e.target === document.getElementById('player-modal')) closeModal(); });
-        document.getElementById('add-player-modal').addEventListener('click', (e) => { if (e.target === document.getElementById('add-player-modal')) closeAddPlayerModal(); });
-        document.getElementById('settings-modal').addEventListener('click', (e) => { if (e.target === document.getElementById('settings-modal')) closeSettingsModal(); });
+        
+        document.getElementById('player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('player-modal')) closeModal();
+        });
+        document.getElementById('add-player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('add-player-modal')) closeAddPlayerModal();
+        });
+        document.getElementById('settings-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('settings-modal')) closeSettingsModal();
+        });
 
-        window.onload = () => { switchTab('Active Prospects'); };
+        window.onload = () => {
+            switchTab('Active Prospects');
+        };
     </script>
 </body>
 </html>
