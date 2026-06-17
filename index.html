@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
-    <!-- Tailwind CSS for sleek dark styling -->
+    <!-- Tailwind CSS Dynamic CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         .modal-transition {
@@ -14,7 +14,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
-    <!-- Header Navigation -->
+    <!-- Header Navigation Bar -->
     <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
@@ -35,19 +35,19 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Tab Header Title -->
+        <!-- Section Header Info -->
         <div class="mb-6 flex justify-between items-center">
             <h2 id="current-tab-title" class="text-2xl font-semibold text-slate-200">Active Prospects</h2>
             <div id="loading-indicator" class="text-sm text-blue-400 animate-pulse">Syncing data...</div>
         </div>
 
-        <!-- Player Badges Grid Display -->
+        <!-- Player Data Badges Target Grid -->
         <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            <!-- Dynamic players load here -->
+            <!-- Dynamic items mount here -->
         </div>
     </main>
 
-    <!-- POP-OUT DETAILS MODAL BOX -->
+    <!-- DETAILED MODAL POP-OUT SCREEN -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
             
@@ -66,54 +66,40 @@
 
                 <hr class="border-slate-800 my-4">
 
-                <!-- Dynamic Info Matrix -->
+                <!-- Dynamic Metadata Property Matrix -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="modal-meta-grid">
-                    <!-- Metrics load dynamically -->
+                    <!-- Javascript populates data boxes dynamically -->
                 </div>
 
-                <!-- Scouting Profile Text Box -->
+                <!-- Scouting Profile Text Card Segment -->
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Scouting Reports & Notes</h4>
                     <p id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto">
-                        Notes layout text goes here.
+                        Evaluations populate here.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PIPELINE ARCHITECTURE LOGIC -->
+    <!-- CORE SYSTEM PIPELINE ARCHITECTURE -->
     <script>
         const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
 
-        // STRIP HYPERLINK FORMULAS: Extracts the real name from =HYPERLINK("url", "Name")
-        function cleanPlayerName(rawName) {
-            if (!rawName) return "";
-            const text = String(rawName).trim();
-            
-            // Check if it's a formula string matching the hyperlink layout
+        // STRIP GOOGLE FORMULAS: Safely parses '=HYPERLINK("...", "Name")' or clean text
+        function parseCleanText(rawString) {
+            if (!rawString) return "";
+            let text = String(rawString).trim();
             if (text.toUpperCase().startsWith("=HYPERLINK")) {
-                // Regex matches the second string inside double quotes right before the closing parenthesis
-                const matches = text.match(/text-slate-100|",\s*"([^"]+)"\s*\)$|",\s*"([^"]+)"\s*\)/i);
-                if (matches) {
-                    return matches[1] || matches[2] || text;
-                }
-                
-                // Fallback splitting logic if regex misses complex URL characters
-                try {
-                    const parts = text.split(",");
-                    if (parts.length > 1) {
-                        let finalPart = parts[parts.length - 1].replace(/[")\s]/g, "");
-                        if (finalPart) return finalPart;
-                    }
-                } catch(e) {}
+                const matches = text.match(/",\s*"([^"]+)"\s*\)$|",\s*"([^"]+)"\s*\)/i);
+                if (matches) return matches[1] || matches[2] || text;
             }
             return text;
         }
 
-        // Dynamic Card / Badge Color Assignment
+        // Color coordination assignments per tier
         function getTierColor(tierString) {
             if (!tierString) return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
             const lower = tierString.toLowerCase();
@@ -130,97 +116,144 @@
             return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
         }
 
-        // Fetch Pipeline Engine 
+        // Fetch API Engine Pipeline
         async function loadTabData(tabName) {
             const loadingIndicator = document.getElementById('loading-indicator');
             const grid = document.getElementById('player-grid');
             
             loadingIndicator.classList.remove('hidden');
             grid.innerHTML = ''; 
+            localPlayersCache = [];
 
             try {
+                // Request the tab without row offset to avoid key stripping
                 const cleanTabName = encodeURIComponent(tabName.trim());
-                const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}&offset=8`;
+                const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}`;
                 
                 const response = await fetch(targetUrl);
                 const data = await response.json();
                 
                 if (Array.isArray(data)) {
-                    // Filter and process row items dynamically
-                    localPlayersCache = data
-                        .map(p => {
-                            // Extract clean text names from formula items
-                            p.CleanName = cleanPlayerName(p.Player);
-                            return p;
-                        })
-                        .filter(p => p.CleanName !== "" && !p.CleanName.includes('#REF!') && !p.CleanName.toUpperCase().includes('PLAYER'));
-                    
+                    // Universal positional row indexing parsing block
+                    data.forEach(row => {
+                        // Gather raw values into sequential order array
+                        const values = Object.values(row).map(v => String(v).trim());
+                        
+                        // Check if the current row holds player details (Column index 1)
+                        const rawPlayerField = values[1];
+                        if (!rawPlayerField || rawPlayerField === "undefined" || rawPlayerField === "") return;
+                        
+                        const playerText = parseCleanText(rawPlayerField);
+                        
+                        // Filter design banners, blank parameters, or utility blocks
+                        if (
+                            playerText === "" || 
+                            playerText.toUpperCase() === "PLAYER" || 
+                            playerText.includes("Talent-to-Success") || 
+                            playerText.includes("💡") ||
+                            playerText.includes("#REF!")
+                        ) return;
+
+                        // Universally normalize object data structures relative to sheet tab layout shapes
+                        let playerObj = {
+                            name: playerText,
+                            tier: parseCleanText(values[2]),
+                            score: parseCleanText(values[3]),
+                            col4: parseCleanText(values[4]), // Current Org / Highest Level
+                            col5: parseCleanText(values[5]), // Past Orgs
+                            col6: parseCleanText(values[6]), // Drafted or Signed By
+                            col7: parseCleanText(values[7]), // All Orgs Search
+                            col8: parseCleanText(values[8]), // Prospect Standing / MLB Stats / Peak Standing
+                            notes: parseCleanText(values[9])  // Notes block
+                        };
+
+                        localPlayersCache.push(playerObj);
+                    });
+
                     renderPlayerBadges();
                 } else {
-                    throw new Error("SheetDB data payload is not standard matrix array");
+                    throw new Error("Invalid array payload received");
                 }
             } catch (error) {
-                console.error("Pipeline failure fetching SheetDB logs:", error);
-                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to synchronize sheet data lines. Verify tab structure.</div>`;
+                console.error("Pipeline Sync Failure:", error);
+                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Database sync mismatch error. Confirm your Google Sheets tab naming rules matching perfectly.</div>`;
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
         }
 
-        // Render minimalistic visual name badges
+        // Render mini player selection cards
         function renderPlayerBadges() {
             const grid = document.getElementById('player-grid');
             grid.innerHTML = '';
 
             if (localPlayersCache.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player profiles found.</div>`;
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player metrics found under this database header.</div>`;
                 return;
             }
 
             localPlayersCache.forEach((player, index) => {
-                const colors = getTierColor(player.Tier);
+                const colors = getTierColor(player.tier);
                 
                 const badge = document.createElement('div');
                 badge.className = `p-3 rounded-xl border ${colors.bg} ${colors.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
                 badge.onclick = () => openModal(index);
                 
                 badge.innerHTML = `
-                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.CleanName}</div>
+                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.name}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider ${colors.text} truncate mt-1">
-                        ${player['Talent-to-Success Score'] ? 'Score: ' + player['Talent-to-Success Score'] : 'Unrated'}
+                        ${player.score ? 'Score: ' + player.score : 'Unrated'}
                     </div>
                 `;
                 grid.appendChild(badge);
             });
         }
 
-        // Display Pop-out Modal Details Box
+        // Pop-out info module rendering manager
         function openModal(index) {
             const player = localPlayersCache[index];
-            const colors = getTierColor(player.Tier);
+            const colors = getTierColor(player.tier);
             
             document.getElementById('modal-accent-bar').style.backgroundColor = colors.hex;
-            document.getElementById('modal-player-name').innerText = player.CleanName;
+            document.getElementById('modal-player-name').innerText = player.name;
             document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
-            document.getElementById('modal-player-tier').innerText = player.Tier || 'Unclassified Profile';
-            document.getElementById('modal-player-notes').innerText = player.Notes || 'No scouting notes available.';
+            document.getElementById('modal-player-tier').innerText = player.tier || 'Unclassified Profile';
+            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged in spreadsheet rows.';
 
             const metaGrid = document.getElementById('modal-meta-grid');
             metaGrid.innerHTML = '';
 
-            const dataKeys = [
-                { label: 'Talent-to-Success Score', val: player['Talent-to-Success Score'] },
-                { label: 'Current Org', val: player['Current Org'] },
-                { label: 'Drafted/Signed By', val: player['Drafted/Signed By'] },
-                { label: 'Past Orgs', val: player['Past Orgs'] },
-                { label: 'Current Standing', val: player['Current Prospect Standing'] },
-                { label: 'Career MLB Stats', val: player['Career MLB Stats'] },
-                { label: 'Highest Level Met', val: player['Highest Level'] },
-                { label: 'Peak Board Placement', val: player['Peak Prospect Standing'] }
-            ];
+            // Construct explicit key values maps conditionally dependent on tab context structures
+            let metricsMatrix = [];
+            if (currentTab === 'Historical Archive (Inactives)') {
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Highest Level Met', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Peak Board Placement', val: player.col8 }
+                ];
+            } else if (currentTab === 'Active Major Leaguers') {
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Current Org', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Career MLB Stats', val: player.col8 }
+                ];
+            } else {
+                // Default fallback configuration maps explicitly to 'Active Prospects' template paths
+                metricsMatrix = [
+                    { label: 'Talent-to-Success Score', val: player.score },
+                    { label: 'Current Org', val: player.col4 },
+                    { label: 'Past Orgs', val: player.col5 },
+                    { label: 'Drafted/Signed By', val: player.col6 },
+                    { label: 'Current Standing', val: player.col8 }
+                ];
+            }
 
-            dataKeys.forEach(metric => {
-                if (metric.val && metric.val.trim() !== "" && metric.val !== "None" && !metric.val.includes('#REF!')) {
+            metricsMatrix.forEach(metric => {
+                if (metric.val && metric.val.trim() !== "" && metric.val !== "undefined" && metric.val !== "None" && !metric.val.includes('#REF!')) {
                     const block = document.createElement('div');
                     block.className = 'bg-slate-950/60 p-3 rounded-lg border border-slate-800/80';
                     block.innerHTML = `
@@ -251,7 +284,7 @@
             }, 250);
         }
 
-        // Global Navigation Tab Manager
+        // Universal Navigation Tabs controller
         function switchTab(tabName) {
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
