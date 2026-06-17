@@ -439,69 +439,90 @@
         }
 
         async function handleFormSubmit(event) {
-            event.preventDefault();
-            const submitBtn = document.getElementById('submit-btn');
-            const originalBtnText = submitBtn.innerHTML;
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `Saving...`;
+    event.preventDefault();
+    const submitBtn = document.getElementById('submit-btn');
+    const originalBtnText = submitBtn.innerHTML;
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `Saving...`;
 
-            const targetTab = document.getElementById('form-target-tab').value;
+    const targetTab = document.getElementById('form-target-tab').value;
 
-            if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 2) {
-                activeSheetSchemaKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
-            }
+    // Grab values from form inputs
+    const pName = document.getElementById('form-name').value.trim();
+    const pTier = document.getElementById('form-tier').value;
+    const pScore = document.getElementById('form-score').value.trim();
+    const pCol4 = document.getElementById('form-col4').value.trim() || 'None';
+    const pCol5 = document.getElementById('form-col5').value.trim() || 'None';
+    const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
+    const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
+    const pNotes = document.getElementById('form-notes').value.trim() || '';
+    const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            const pName = document.getElementById('form-name').value.trim();
-            const pTier = document.getElementById('form-tier').value;
-            const pScore = document.getElementById('form-score').value.trim();
-            const pCol4 = document.getElementById('form-col4').value.trim() || 'None';
-            const pCol5 = document.getElementById('form-col5').value.trim() || 'None';
-            const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
-            const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
-            const pNotes = document.getElementById('form-notes').value.trim() || '';
-            const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
+    // Build standard structure matching your sheet's tracked schema
+    const rowPayload = {
+        "field_1": "", 
+        "Player": pName,
+        "Tier": pTier,
+        "Talent-to-Success Score": pScore,
+        "Current Org": pCol4,
+        "Past Orgs": pCol5,
+        "Drafted/Signed By": pCol6,
+        "All Orgs Search": pCol7,
+        "Current Prospect Standing": pCol8,
+        "Notes": pNotes
+    };
 
-            const rowPayload = {};
-            
-            rowPayload[activeSheetSchemaKeys[0] || "field_1"] = ""; 
-            rowPayload[activeSheetSchemaKeys[1] || "Player"] = pName;
-            rowPayload[activeSheetSchemaKeys[2] || "Tier"] = pTier;
-            rowPayload[activeSheetSchemaKeys[3] || "Talent-to-Success Score"] = pScore;
-            rowPayload[activeSheetSchemaKeys[4] || "Current Org"] = pCol4;
-            rowPayload[activeSheetSchemaKeys[5] || "Past Orgs"] = pCol5;
-            rowPayload[activeSheetSchemaKeys[6] || "Drafted/Signed By"] = pCol6;
-            rowPayload[activeSheetSchemaKeys[7] || "All Orgs Search"] = pCol7;
-            rowPayload[activeSheetSchemaKeys[8] || "Current Prospect Standing"] = pCol8;
-            rowPayload[activeSheetSchemaKeys[9] || "Notes"] = pNotes;
-
-            try {
-                const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab)}`;
-                const response = await fetch(targetUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ data: [rowPayload] })
-                });
-
-                await response.json();
-                closeAddPlayerModal();
-                
-                if (currentTab === targetTab) {
-                    loadTabData(currentTab);
-                } else {
-                    switchTab(targetTab);
+    // If the database successfully fetched column headers earlier, map them smoothly
+    if (activeSheetSchemaKeys && activeSheetSchemaKeys.length >= 2) {
+        const fallbackKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
+        fallbackKeys.forEach((key, index) => {
+            if (activeSheetSchemaKeys[index]) {
+                rowPayload[activeSheetSchemaKeys[index]] = rowPayload[key];
+                // Remove the old key if the names are mismatched
+                if (activeSheetSchemaKeys[index] !== key) {
+                    delete rowPayload[key];
                 }
-            } catch (err) {
-                console.error("Write pipeline error:", err);
-                alert("Failed to write details to database. Confirm API settings.");
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
             }
+        });
+    }
+
+    try {
+        const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab.trim())}`;
+        const response = await fetch(targetUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ data: [rowPayload] })
+        });
+
+        const result = await response.json();
+        
+        // Handle explicit error responses sent back from SheetDB
+        if (result.errors || result.error) {
+            console.error("SheetDB Rejected Entry:", result);
+            alert(`Database rejected entry. Please double check that the top row of your "${targetTab}" Google Sheet has exactly these columns:\n\nPlayer, Tier, Talent-to-Success Score, Current Org, Past Orgs, Drafted/Signed By`);
+            return;
         }
+
+        closeAddPlayerModal();
+        
+        // Refresh grid
+        if (currentTab === targetTab) {
+            loadTabData(currentTab);
+        } else {
+            switchTab(targetTab);
+        }
+    } catch (err) {
+        console.error("Write pipeline error:", err);
+        alert("Failed to write details to database. Confirm internet connectivity or API write limits.");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+}
 
         function switchTab(tabName) {
             currentTab = tabName;
