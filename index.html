@@ -263,28 +263,29 @@ function getTierColor(tabName, tierString) {
         }
 
         function renderPlayerBadges() {
-            const grid = document.getElementById('player-grid');
-            grid.innerHTML = '';
-            if (localPlayersCache.length === 0) return;
+    const grid = document.getElementById('player-grid');
+    grid.innerHTML = '';
+    if (localPlayersCache.length === 0) return;
 
-            localPlayersCache.forEach((player, index) => {
-                const hexColor = getTierColor(currentTab, player.tier);
-                const badge = document.createElement('div');
-                
-                // Keep background elegant dark slate, apply the clean top accent color bar
-                badge.className = `p-4 bg-slate-900 border border-slate-800 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24 shadow-sm hover:shadow-md`;
-                badge.style.borderTop = `4px solid ${hexColor}`;
-                badge.onclick = () => openModal(index);
-                
-                badge.innerHTML = `
-                    <div class="font-semibold text-slate-100 group-hover:text-white transition text-sm sm:text-base line-clamp-2">${player.name}</div>
-                    <div class="text-[11px] font-bold uppercase tracking-wider mt-1" style="color: ${hexColor}">
-                        ${player.score ? 'Score: ' + player.score : 'Unrated'}
-                    </div>
-                `;
-                grid.appendChild(badge);
-            });
-        }
+    localPlayersCache.forEach((player, index) => {
+        const hexColor = getTierColor(currentTab, player.tier);
+        const badge = document.createElement('div');
+        
+        // Change background to hexColor dynamically, and force text to black (#000000)
+        badge.className = `p-4 border border-slate-800/20 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24 shadow-sm hover:shadow-md`;
+        badge.style.backgroundColor = hexColor;
+        badge.onclick = () => openModal(index);
+        
+        // Ensure text color inside the card is black (#000000) to contrast with your light pastels
+        badge.innerHTML = `
+            <div class="font-bold text-black transition text-sm sm:text-base line-clamp-2">${player.name}</div>
+            <div class="text-[11px] font-extrabold uppercase tracking-wider mt-1 text-black/80">
+                ${player.score ? 'Score: ' + player.score : 'Unrated'}
+            </div>
+        `;
+        grid.appendChild(badge);
+    });
+}
 
         function openModal(index) {
             const player = localPlayersCache[index];
