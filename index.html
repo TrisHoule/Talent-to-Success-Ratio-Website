@@ -16,21 +16,28 @@
 
     <!-- Header Navigation Bar -->
     <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
                 Talent-to-Success Database
             </h1>
-            <nav class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
-                <button onclick="switchTab('Active Prospects')" id="btn-ActiveProspects" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white">
-                    Active Prospects
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto justify-end">
+                <nav class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 w-full sm:w-auto justify-center">
+                    <button onclick="switchTab('Active Prospects')" id="btn-ActiveProspects" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white">
+                        Active Prospects
+                    </button>
+                    <button onclick="switchTab('Active Major Leaguers')" id="btn-ActiveMajorLeaguers" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                        Active MLB
+                    </button>
+                    <button onclick="switchTab('Historical Archive (Inactives)')" id="btn-HistoricalArchive" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
+                        Historical Archive
+                    </button>
+                </nav>
+                <!-- Action Trigger for Add Player -->
+                <button onclick="openAddPlayerModal()" class="w-full sm:w-auto px-4 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Player
                 </button>
-                <button onclick="switchTab('Active Major Leaguers')" id="btn-ActiveMajorLeaguers" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
-                    Active MLB
-                </button>
-                <button onclick="switchTab('Historical Archive (Inactives)')" id="btn-HistoricalArchive" class="px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200">
-                    Historical Archive
-                </button>
-            </nav>
+            </div>
         </div>
     </header>
 
@@ -47,50 +54,128 @@
         </div>
     </main>
 
-    <!-- DETAILED MODAL POP-OUT SCREEN -->
+    <!-- POP-OUT DETAILS MODAL SCREEN -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
-            
             <div id="modal-accent-bar" class="h-2 w-full bg-blue-500"></div>
-            
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <h3 id="modal-player-name" class="text-2xl font-bold text-white">Player Name</h3>
                         <span id="modal-player-tier" class="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-800 text-slate-300">Tier Info</span>
                     </div>
-                    <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-
                 <hr class="border-slate-800 my-4">
-
-                <!-- Dynamic Metadata Property Matrix -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="modal-meta-grid">
-                    <!-- Javascript populates data boxes dynamically -->
-                </div>
-
-                <!-- Scouting Profile Text Card Segment -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="modal-meta-grid"></div>
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Scouting Reports & Notes</h4>
-                    <p id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto">
-                        Evaluations populate here.
-                    </p>
+                    <p id="modal-player-notes" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800 max-h-60 overflow-y-auto"></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CORE SYSTEM PIPELINE ARCHITECTURE -->
+    <!-- ADD NEW PLAYER PROFILE MODAL -->
+    <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 modal-transition">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
+            <div class="h-2 w-full bg-emerald-500"></div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-white">Add New Database Record</h3>
+                    <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <form id="add-player-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Destination Target Tab Selector -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Spreadsheet Tab</label>
+                            <select id="form-target-tab" onchange="adaptFormLabels()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                <option value="Active Prospects">Active Prospects</option>
+                                <option value="Active Major Leaguers">Active Major Leaguers</option>
+                                <option value="Historical Archive (Inactives)">Historical Archive (Inactives)</option>
+                            </select>
+                        </div>
+                        <!-- Player Identity Name -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Player Full Name</label>
+                            <input type="text" id="form-name" required placeholder="e.g., Dylan Crews" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Quality Tier Category Placement -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Evaluation Tier Classification</label>
+                            <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                <option value="Tier 1: Elite / Near-Ready Impact">Tier 1: Elite / Impact</option>
+                                <option value="Tier 2: Premium System Pillars">Tier 2: Premium Pillars</option>
+                                <option value="Tier 3: Active Core Utility & Bench Assets">Tier 3: Core Utility</option>
+                                <option value="Tier 4: Triple-A Stalwarts">Tier 4: Triple-A Stalwarts</option>
+                            </select>
+                        </div>
+                        <!-- Metrics Grade Rating -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Talent-to-Success Score</label>
+                            <input type="number" step="0.1" min="0" max="10" id="form-score" placeholder="e.g., 7.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <!-- Context Column 4 Variable Label -->
+                        <div>
+                            <label id="label-col4" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Org</label>
+                            <input type="text" id="form-col4" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <!-- Past Affiliations Context Column 5 -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Past Orgs</label>
+                            <input type="text" id="form-col5" placeholder="e.g., LAD, BOS (or None)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <!-- Acquisition Source Column 6 -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Drafted/Signed By</label>
+                            <input type="text" id="form-col6" placeholder="e.g., WSH" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Standing Metric Information Column 8 -->
+                    <div>
+                        <label id="label-col8" class="block text-xs font-bold uppercase text-slate-400 mb-1">Current Prospect Standing</label>
+                        <input type="text" id="form-col8" placeholder="e.g., #4 Prospect in Baseball (2026)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <!-- Evaluation Descriptive Block Paragraphs Column 9 -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Scouting Reports & Performance Notes</label>
+                        <textarea id="form-notes" rows="4" placeholder="Log extensive multi-tier metric values, tools evaluation parameters, and layout text here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-sans leading-relaxed"></p>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 text-sm font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition cursor-pointer">Cancel</button>
+                        <button type="submit" id="submit-btn" class="px-5 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition shadow-md flex items-center gap-2 cursor-pointer">
+                            Save to Database
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE DASHBOARD JAVASCRIPT ARCHITECTURE ENGINE -->
     <script>
         const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
+        let activeSheetSchemaKeys = []; // Stores the structural layout schema tags pulled from SheetDB raw lines
 
-        // STRIP GOOGLE FORMULAS: Safely parses '=HYPERLINK("...", "Name")' or clean text
         function parseCleanText(rawString) {
-            if (!rawString) return "";
+            if (!rawString || rawString === "undefined" || rawString === "null") return "";
             let text = String(rawString).trim();
             if (text.toUpperCase().startsWith("=HYPERLINK")) {
                 const matches = text.match(/",\s*"([^"]+)"\s*\)$|",\s*"([^"]+)"\s*\)/i);
@@ -99,24 +184,16 @@
             return text;
         }
 
-        // Color coordination assignments per tier
         function getTierColor(tierString) {
             if (!tierString) return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
             const lower = tierString.toLowerCase();
-            
-            if (lower.includes('tier 1')) {
-                return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30', hex: '#f59e0b' };
-            } else if (lower.includes('tier 2')) {
-                return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', hex: '#10b981' };
-            } else if (lower.includes('tier 3')) {
-                return { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30', hex: '#3b82f6' };
-            } else if (lower.includes('tier 4')) {
-                return { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30', hex: '#a855f7' };
-            }
+            if (lower.includes('tier 1')) return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30', hex: '#f59e0b' };
+            if (lower.includes('tier 2')) return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', hex: '#10b981' };
+            if (lower.includes('tier 3')) return { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30', hex: '#3b82f6' };
+            if (lower.includes('tier 4')) return { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30', hex: '#a855f7' };
             return { bg: 'bg-slate-800/40', text: 'text-slate-300', border: 'border-slate-700/60', hex: '#64748b' };
         }
 
-        // Fetch API Engine Pipeline
         async function loadTabData(tabName) {
             const loadingIndicator = document.getElementById('loading-indicator');
             const grid = document.getElementById('player-grid');
@@ -126,75 +203,55 @@
             localPlayersCache = [];
 
             try {
-                // Request the tab without row offset to avoid key stripping
                 const cleanTabName = encodeURIComponent(tabName.trim());
                 const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}`;
                 
                 const response = await fetch(targetUrl);
                 const data = await response.json();
                 
-                if (Array.isArray(data)) {
-                    // Universal positional row indexing parsing block
+                if (Array.isArray(data) && data.length > 0) {
+                    // CACHE THE EXACT SCHEMA KEYS FOR THIS TAB: Bypasses header misalignments entirely
+                    activeSheetSchemaKeys = Object.keys(data[0]);
+
                     data.forEach(row => {
-                        // Gather raw values into sequential order array
                         const values = Object.values(row).map(v => String(v).trim());
-                        
-                        // Check if the current row holds player details (Column index 1)
                         const rawPlayerField = values[1];
                         if (!rawPlayerField || rawPlayerField === "undefined" || rawPlayerField === "") return;
                         
                         const playerText = parseCleanText(rawPlayerField);
-                        
-                        // Filter design banners, blank parameters, or utility blocks
-                        if (
-                            playerText === "" || 
-                            playerText.toUpperCase() === "PLAYER" || 
-                            playerText.includes("Talent-to-Success") || 
-                            playerText.includes("💡") ||
-                            playerText.includes("#REF!")
-                        ) return;
+                        if (playerText === "" || playerText.toUpperCase() === "PLAYER" || playerText.includes("Talent-to-Success") || playerText.includes("💡") || playerText.includes("#REF!")) return;
 
-                        // Universally normalize object data structures relative to sheet tab layout shapes
-                        let playerObj = {
+                        localPlayersCache.push({
                             name: playerText,
                             tier: parseCleanText(values[2]),
                             score: parseCleanText(values[3]),
-                            col4: parseCleanText(values[4]), // Current Org / Highest Level
-                            col5: parseCleanText(values[5]), // Past Orgs
-                            col6: parseCleanText(values[6]), // Drafted or Signed By
-                            col7: parseCleanText(values[7]), // All Orgs Search
-                            col8: parseCleanText(values[8]), // Prospect Standing / MLB Stats / Peak Standing
-                            notes: parseCleanText(values[9])  // Notes block
-                        };
-
-                        localPlayersCache.push(playerObj);
+                            col4: parseCleanText(values[4]), 
+                            col5: parseCleanText(values[5]), 
+                            col6: parseCleanText(values[6]), 
+                            col7: parseCleanText(values[7]), 
+                            col8: parseCleanText(values[8]), 
+                            notes: parseCleanText(values[9])  
+                        });
                     });
-
                     renderPlayerBadges();
                 } else {
-                    throw new Error("Invalid array payload received");
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No profiles found inside this sheet.</div>`;
                 }
             } catch (error) {
                 console.error("Pipeline Sync Failure:", error);
-                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Database sync mismatch error. Confirm your Google Sheets tab naming rules matching perfectly.</div>`;
+                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to sync database rows. Verify structural integrity parameters.</div>`;
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
         }
 
-        // Render mini player selection cards
         function renderPlayerBadges() {
             const grid = document.getElementById('player-grid');
             grid.innerHTML = '';
-
-            if (localPlayersCache.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player metrics found under this database header.</div>`;
-                return;
-            }
+            if (localPlayersCache.length === 0) return;
 
             localPlayersCache.forEach((player, index) => {
                 const colors = getTierColor(player.tier);
-                
                 const badge = document.createElement('div');
                 badge.className = `p-3 rounded-xl border ${colors.bg} ${colors.border} hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between group h-24 shadow-sm hover:shadow-md`;
                 badge.onclick = () => openModal(index);
@@ -209,7 +266,6 @@
             });
         }
 
-        // Pop-out info module rendering manager
         function openModal(index) {
             const player = localPlayersCache[index];
             const colors = getTierColor(player.tier);
@@ -218,12 +274,11 @@
             document.getElementById('modal-player-name').innerText = player.name;
             document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
             document.getElementById('modal-player-tier').innerText = player.tier || 'Unclassified Profile';
-            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged in spreadsheet rows.';
+            document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged in database lines.';
 
             const metaGrid = document.getElementById('modal-meta-grid');
             metaGrid.innerHTML = '';
 
-            // Construct explicit key values maps conditionally dependent on tab context structures
             let metricsMatrix = [];
             if (currentTab === 'Historical Archive (Inactives)') {
                 metricsMatrix = [
@@ -242,7 +297,6 @@
                     { label: 'Career MLB Stats', val: player.col8 }
                 ];
             } else {
-                // Default fallback configuration maps explicitly to 'Active Prospects' template paths
                 metricsMatrix = [
                     { label: 'Talent-to-Success Score', val: player.score },
                     { label: 'Current Org', val: player.col4 },
@@ -253,7 +307,7 @@
             }
 
             metricsMatrix.forEach(metric => {
-                if (metric.val && metric.val.trim() !== "" && metric.val !== "undefined" && metric.val !== "None" && !metric.val.includes('#REF!')) {
+                if (metric.val && metric.val.trim() !== "" && metric.val !== "None") {
                     const block = document.createElement('div');
                     block.className = 'bg-slate-950/60 p-3 rounded-lg border border-slate-800/80';
                     block.innerHTML = `
@@ -267,44 +321,166 @@
             const modal = document.getElementById('player-modal');
             const card = document.getElementById('modal-card');
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                card.classList.remove('scale-95');
-            }, 10);
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('player-modal');
             const card = document.getElementById('modal-card');
-            
-            modal.classList.add('opacity-0');
-            card.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 250);
+            modal.classList.add('opacity-0'); card.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 250);
         }
 
-        // Universal Navigation Tabs controller
+        /* --- ADD NEW PLAYER DATA PIPELINE CONTROLLERS --- */
+        
+        function openAddPlayerModal() {
+            // Match form's starting target option to the layout tab the viewer is looking at
+            document.getElementById('form-target-tab').value = currentTab;
+            adaptFormLabels();
+            
+            const modal = document.getElementById('add-player-modal');
+            const card = document.getElementById('add-modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); card.classList.remove('scale-95'); }, 10);
+        }
+
+        function closeAddPlayerModal() {
+            const modal = document.getElementById('add-player-modal');
+            const card = document.getElementById('add-modal-card');
+            modal.classList.add('opacity-0'); card.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); document.getElementById('add-player-form').reset(); }, 250);
+        }
+
+        // Dynamically morph form field text prompts relative to the chosen database destination tab
+        function adaptFormLabels() {
+            const selectedTab = document.getElementById('form-target-tab').value;
+            const labelCol4 = document.getElementById('label-col4');
+            const labelCol8 = document.getElementById('label-col8');
+            const inputCol8 = document.getElementById('form-col8');
+
+            if (selectedTab === 'Historical Archive (Inactives)') {
+                labelCol4.innerText = "Highest Level Met";
+                labelCol8.innerText = "Peak Board Placement";
+                inputCol8.placeholder = "e.g., #15 Peak Prospect Standing";
+            } else if (selectedTab === 'Active Major Leaguers') {
+                labelCol4.innerText = "Current Org";
+                labelCol8.innerText = "Career MLB Stats";
+                inputCol8.placeholder = "e.g., .254 AVG, 84 HR, 4.2 bWAR";
+            } else {
+                labelCol4.innerText = "Current Org";
+                labelCol8.innerText = "Current Prospect Standing";
+                inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
+            }
+        }
+
+        // POST Request Pipeline Execution
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // UI Visual Loading State lock
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Appending Record...`;
+
+            const targetTab = document.getElementById('form-target-tab').value;
+
+            // Check if application synchronized layout tags successfully before attempting structural write back
+            if (!activeSheetSchemaKeys || activeSheetSchemaKeys.length < 10) {
+                alert("Database schema tags unverified. Switch view panels once to synchronize data headers before recording additions.");
+                submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText;
+                return;
+            }
+
+            // Read raw values directly from interactive form inputs
+            const pName = document.getElementById('form-name').value.trim();
+            const pTier = document.getElementById('form-tier').value;
+            const pScore = document.getElementById('form-score').value.trim();
+            const pCol4 = document.getElementById('form-col4').value.trim() || 'None';
+            const pCol5 = document.getElementById('form-col5').value.trim() || 'None';
+            const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
+            const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
+            const pNotes = document.getElementById('form-notes').value.trim() || '';
+
+            // Compute automated relational text search parameters matching your Sheet's structure
+            const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
+
+            // BUILD THE EXPLICIT DYNAMIC ROW PAYLOAD OBJECT
+            const rowPayload = {};
+            
+            // Map form attributes precisely to the corresponding internal Column Header fields SheetDB generated
+            rowPayload[activeSheetSchemaKeys[0]] = ""; // Left padding tracking column index 
+            rowPayload[activeSheetSchemaKeys[1]] = pName;
+            rowPayload[activeSheetSchemaKeys[2]] = pTier;
+            rowPayload[activeSheetSchemaKeys[3]] = pScore;
+            rowPayload[activeSheetSchemaKeys[4]] = pCol4;
+            rowPayload[activeSheetSchemaKeys[5]] = pCol5;
+            rowPayload[activeSheetSchemaKeys[6]] = pCol6;
+            rowPayload[activeSheetSchemaKeys[7]] = pCol7;
+            rowPayload[activeSheetSchemaKeys[8]] = pCol8;
+            rowPayload[activeSheetSchemaKeys[9]] = pNotes;
+
+            try {
+                const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab)}`;
+                const response = await fetch(targetUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: [rowPayload] })
+                });
+
+                const result = await response.json();
+
+                // SheetDB outputs success metrics object with an created row confirmation integer
+                if (result.created === 1 || result.success || (result.data && result.data.length > 0)) {
+                    closeAddPlayerModal();
+                    // Instant live viewport refresh update loop logic
+                    if (currentTab === targetTab) {
+                        loadTabData(currentTab);
+                    } else {
+                        switchTab(targetTab);
+                    }
+                } else {
+                    throw new Error("SheetDB API rejected row insertion logs.");
+                }
+            } catch (err) {
+                console.error("Write pipeline error:", err);
+                alert("Failed to write data records back to Google Sheets. Verify system configurations inside SheetDB control hubs.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        }
+
+        /* --- GLOBAL NAVIGATION TAB MANAGER --- */
         function switchTab(tabName) {
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = "px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200";
+                btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200 cursor-pointer";
             });
 
             const activeId = 'btn-' + tabName.replace(/[^a-zA-Z]/g, "");
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
-                activeBtn.className = "px-4 py-2 text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white";
+                activeBtn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition nav-btn bg-blue-600 text-white cursor-pointer";
             }
 
             loadTabData(tabName);
         }
 
-        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        window.addEventListener('keydown', (e) => { 
+            if (e.key === 'Escape') { closeModal(); closeAddPlayerModal(); } 
+        });
+        
         document.getElementById('player-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('player-modal')) closeModal();
+        });
+        document.getElementById('add-player-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('add-player-modal')) closeAddPlayerModal();
         });
 
         window.onload = () => {
