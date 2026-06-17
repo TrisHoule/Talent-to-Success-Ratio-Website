@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
-    <!-- Tailwind CSS for modern styling -->
+    <!-- Tailwind CSS for sleek dark styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         .modal-transition {
@@ -84,10 +84,34 @@
 
     <!-- PIPELINE ARCHITECTURE LOGIC -->
     <script>
-        // Single API Link Config
         const BASE_API_URL = 'https://sheetdb.io/api/v1/im4sx1l1jcszt';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
+
+        // STRIP HYPERLINK FORMULAS: Extracts the real name from =HYPERLINK("url", "Name")
+        function cleanPlayerName(rawName) {
+            if (!rawName) return "";
+            const text = String(rawName).trim();
+            
+            // Check if it's a formula string matching the hyperlink layout
+            if (text.toUpperCase().startsWith("=HYPERLINK")) {
+                // Regex matches the second string inside double quotes right before the closing parenthesis
+                const matches = text.match(/text-slate-100|",\s*"([^"]+)"\s*\)$|",\s*"([^"]+)"\s*\)/i);
+                if (matches) {
+                    return matches[1] || matches[2] || text;
+                }
+                
+                // Fallback splitting logic if regex misses complex URL characters
+                try {
+                    const parts = text.split(",");
+                    if (parts.length > 1) {
+                        let finalPart = parts[parts.length - 1].replace(/[")\s]/g, "");
+                        if (finalPart) return finalPart;
+                    }
+                } catch(e) {}
+            }
+            return text;
+        }
 
         // Dynamic Card / Badge Color Assignment
         function getTierColor(tierString) {
@@ -115,23 +139,29 @@
             grid.innerHTML = ''; 
 
             try {
-                // EXPLICIT SHEET ENCODING: Fixes SheetDB free tier skipping tabs with spaces
                 const cleanTabName = encodeURIComponent(tabName.trim());
                 const targetUrl = `${BASE_API_URL}?sheet=${cleanTabName}&offset=8`;
                 
                 const response = await fetch(targetUrl);
                 const data = await response.json();
                 
-                // Exclude broken layout strings or empty rows from processing
                 if (Array.isArray(data)) {
-                    localPlayersCache = data.filter(p => p.Player && p.Player.trim() !== "" && !p.Player.includes('#REF!'));
+                    // Filter and process row items dynamically
+                    localPlayersCache = data
+                        .map(p => {
+                            // Extract clean text names from formula items
+                            p.CleanName = cleanPlayerName(p.Player);
+                            return p;
+                        })
+                        .filter(p => p.CleanName !== "" && !p.CleanName.includes('#REF!') && !p.CleanName.toUpperCase().includes('PLAYER'));
+                    
                     renderPlayerBadges();
                 } else {
                     throw new Error("SheetDB data payload is not standard matrix array");
                 }
             } catch (error) {
                 console.error("Pipeline failure fetching SheetDB logs:", error);
-                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to synchronize sheet data lines. Verify that tab name match precisely inside Google Sheets.</div>`;
+                grid.innerHTML = `<div class="col-span-full p-6 text-center text-red-400 bg-red-950/20 border border-red-900 rounded-xl">Failed to synchronize sheet data lines. Verify tab structure.</div>`;
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
@@ -143,7 +173,7 @@
             grid.innerHTML = '';
 
             if (localPlayersCache.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player profiles returned from this database tab.</div>`;
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">No active player profiles found.</div>`;
                 return;
             }
 
@@ -155,7 +185,7 @@
                 badge.onclick = () => openModal(index);
                 
                 badge.innerHTML = `
-                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.Player}</div>
+                    <div class="font-semibold text-white group-hover:text-blue-400 transition text-sm sm:text-base line-clamp-2">${player.CleanName}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider ${colors.text} truncate mt-1">
                         ${player['Talent-to-Success Score'] ? 'Score: ' + player['Talent-to-Success Score'] : 'Unrated'}
                     </div>
@@ -170,12 +200,11 @@
             const colors = getTierColor(player.Tier);
             
             document.getElementById('modal-accent-bar').style.backgroundColor = colors.hex;
-            document.getElementById('modal-player-name').innerText = player.Player;
+            document.getElementById('modal-player-name').innerText = player.CleanName;
             document.getElementById('modal-player-tier').className = `inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold rounded-full ${colors.bg} ${colors.text} border ${colors.border}`;
             document.getElementById('modal-player-tier').innerText = player.Tier || 'Unclassified Profile';
-            document.getElementById('modal-player-notes').innerText = player.Notes || 'No player scouting evaluation notes logged inside database row entries.';
+            document.getElementById('modal-player-notes').innerText = player.Notes || 'No scouting notes available.';
 
-            // Generate field elements inside pop-out depending on active spreadsheet tab keys
             const metaGrid = document.getElementById('modal-meta-grid');
             metaGrid.innerHTML = '';
 
@@ -184,7 +213,6 @@
                 { label: 'Current Org', val: player['Current Org'] },
                 { label: 'Drafted/Signed By', val: player['Drafted/Signed By'] },
                 { label: 'Past Orgs', val: player['Past Orgs'] },
-                { label: 'All Orgs Search', val: player['All Orgs Search'] },
                 { label: 'Current Standing', val: player['Current Prospect Standing'] },
                 { label: 'Career MLB Stats', val: player['Career MLB Stats'] },
                 { label: 'Highest Level Met', val: player['Highest Level'] },
@@ -192,7 +220,6 @@
             ];
 
             dataKeys.forEach(metric => {
-                // Only print blocks if the data point exists and isn't a filler 'None' string
                 if (metric.val && metric.val.trim() !== "" && metric.val !== "None" && !metric.val.includes('#REF!')) {
                     const block = document.createElement('div');
                     block.className = 'bg-slate-950/60 p-3 rounded-lg border border-slate-800/80';
@@ -204,7 +231,6 @@
                 }
             });
 
-            // Slide out animation
             const modal = document.getElementById('player-modal');
             const card = document.getElementById('modal-card');
             modal.classList.remove('hidden');
@@ -230,12 +256,10 @@
             currentTab = tabName;
             document.getElementById('current-tab-title').innerText = tabName;
             
-            // Clear navigation button states
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.className = "px-4 py-2 text-sm font-medium rounded-md transition nav-btn text-slate-400 hover:text-slate-200";
             });
 
-            // Set styling highlight on current active tab selection
             const activeId = 'btn-' + tabName.replace(/[^a-zA-Z]/g, "");
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
@@ -245,13 +269,11 @@
             loadTabData(tabName);
         }
 
-        // Window Listener events for modal closing
         window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
         document.getElementById('player-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('player-modal')) closeModal();
         });
 
-        // App Entry Initialization point
         window.onload = () => {
             switchTab('Active Prospects');
         };
