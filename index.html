@@ -448,7 +448,7 @@
 
     const targetTab = document.getElementById('form-target-tab').value;
 
-    // Grab values from form inputs
+    // Grab form raw data elements cleanly
     const pName = document.getElementById('form-name').value.trim();
     const pTier = document.getElementById('form-tier').value;
     const pScore = document.getElementById('form-score').value.trim();
@@ -456,39 +456,33 @@
     const pCol5 = document.getElementById('form-col5').value.trim() || 'None';
     const pCol6 = document.getElementById('form-col6').value.trim() || 'None';
     const pCol8 = document.getElementById('form-col8').value.trim() || 'None';
-    const pNotes = document.getElementById('form-notes').value.trim() || '';
+    const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
     const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-    // Build standard structure matching your sheet's tracked schema
-    const rowPayload = {
-        "field_1": "", 
-        "Player": pName,
-        "Tier": pTier,
-        "Talent-to-Success Score": pScore,
-        "Current Org": pCol4,
-        "Past Orgs": pCol5,
-        "Drafted/Signed By": pCol6,
-        "All Orgs Search": pCol7,
-        "Current Prospect Standing": pCol8,
-        "Notes": pNotes
-    };
+    // Force build a totally raw, double-wrapped structured backup payload
+    // SheetDB looks for this exact format to append to Google columns row-by-row
+    const rowPayload = {};
+    
+    // Fallback detection: if activeSheetSchemaKeys is blank, force standard column keys
+    const finalKeys = (activeSheetSchemaKeys && activeSheetSchemaKeys.length >= 2) 
+        ? activeSheetSchemaKeys 
+        : ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
 
-    // If the database successfully fetched column headers earlier, map them smoothly
-    if (activeSheetSchemaKeys && activeSheetSchemaKeys.length >= 2) {
-        const fallbackKeys = ["field_1", "Player", "Tier", "Talent-to-Success Score", "Current Org", "Past Orgs", "Drafted/Signed By", "All Orgs Search", "Current Prospect Standing", "Notes"];
-        fallbackKeys.forEach((key, index) => {
-            if (activeSheetSchemaKeys[index]) {
-                rowPayload[activeSheetSchemaKeys[index]] = rowPayload[key];
-                // Remove the old key if the names are mismatched
-                if (activeSheetSchemaKeys[index] !== key) {
-                    delete rowPayload[key];
-                }
-            }
-        });
-    }
+    // Explicitly assign properties to ensure the JS runtime maps variables to the indices correctly
+    rowPayload[finalKeys[0] || "field_1"] = ""; 
+    rowPayload[finalKeys[1] || "Player"] = pName;
+    rowPayload[finalKeys[2] || "Tier"] = pTier;
+    rowPayload[finalKeys[3] || "Talent-to-Success Score"] = pScore;
+    rowPayload[finalKeys[4] || "Current Org"] = pCol4;
+    rowPayload[finalKeys[5] || "Past Orgs"] = pCol5;
+    rowPayload[finalKeys[6] || "Drafted/Signed By"] = pCol6;
+    rowPayload[finalKeys[7] || "All Orgs Search"] = pCol7;
+    rowPayload[finalKeys[8] || "Current Prospect Standing"] = pCol8;
+    rowPayload[finalKeys[9] || "Notes"] = pNotes;
 
     try {
         const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetTab.trim())}`;
+        
         const response = await fetch(targetUrl, {
             method: 'POST',
             headers: {
@@ -499,25 +493,27 @@
         });
 
         const result = await response.json();
-        
-        // Handle explicit error responses sent back from SheetDB
-        if (result.errors || result.error) {
-            console.error("SheetDB Rejected Entry:", result);
-            alert(`Database rejected entry. Please double check that the top row of your "${targetTab}" Google Sheet has exactly these columns:\n\nPlayer, Tier, Talent-to-Success Score, Current Org, Past Orgs, Drafted/Signed By`);
-            return;
+        console.log("SheetDB Save Output Response:", result);
+
+        // If the server wrote successfully, result will contain something like { created: 1 }
+        if (result && (result.created || result.status === 201 || !result.error)) {
+            closeAddPlayerModal();
+            
+            // Forces the UI to fully bust the cache and pull fresh data straight from the sheet
+            setTimeout(() => {
+                if (currentTab === targetTab) {
+                    loadTabData(currentTab);
+                } else {
+                    switchTab(targetTab);
+                }
+            }, 300); // Small 300ms breather to allow Google's servers to index the row
+        } else {
+            alert("The data sent, but the spreadsheet rejected the format. Check your column layout.");
         }
 
-        closeAddPlayerModal();
-        
-        // Refresh grid
-        if (currentTab === targetTab) {
-            loadTabData(currentTab);
-        } else {
-            switchTab(targetTab);
-        }
     } catch (err) {
-        console.error("Write pipeline error:", err);
-        alert("Failed to write details to database. Confirm internet connectivity or API write limits.");
+        console.error("Write pipeline fatal crash:", err);
+        alert("Failed to reach database completely. Check your API limits or internet connection.");
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
