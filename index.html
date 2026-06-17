@@ -169,43 +169,43 @@
             return text;
         }
 
-        // Resolves the exact hexadecimal asset color code based on context configurations
+        // Resolves the EXACT hexadecimal asset color codes provided in your palettes
         function getTierColor(tabName, tierString) {
-            const defaultColor = '#475569'; // Slate 600 default fallback
+            const defaultColor = '#475569'; // Fallback slate if no tier matches
             if (!tierString) return defaultColor;
             
             const lowerTier = tierString.toLowerCase();
             const lowerTab = tabName.toLowerCase();
 
-            // 1. ACTIVE PROSPECTS PALETTE
+            // 1. ACTIVE PROSPECTS TAB PALETTE
             if (lowerTab.includes('prospects')) {
-                if (lowerTier.includes('tier 1')) return '#E2F0D9';
-                if (lowerTier.includes('tier 2')) return '#E6F4EA';
-                if (lowerTier.includes('tier 3')) return '#FFF2CC';
-                if (lowerTier.includes('tier 4')) return '#FCE8E6';
-                if (lowerTier.includes('tier 5')) return '#F1F3F4';
-                if (lowerTier.includes('tier 6')) return '#E8F0FE';
+                if (lowerTier.includes('elite')) return '#E2F0D9';
+                if (lowerTier.includes('premium')) return '#E6F4EA';
+                if (lowerTier.includes('projected')) return '#FFF2CC';
+                if (lowerTier.includes('high-variance') || lowerTier.includes('toolsy')) return '#FCE8E6';
+                if (lowerTier.includes('organizational') || lowerTier.includes('depth')) return '#F1F3F4';
+                if (lowerTier.includes('international')) return '#E8F0FE';
             }
             
-            // 2. ACTIVE MAJOR LEAGUERS PALETTE
+            // 2. ACTIVE MAJOR LEAGUERS TAB PALETTE
             if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
-                if (lowerTier.includes('tier 1')) return '#D0E1FD';
-                if (lowerTier.includes('tier 2')) return '#E1F5FE';
-                if (lowerTier.includes('tier 3')) return '#EAE8FF';
-                if (lowerTier.includes('tier 4')) return '#FFF3E0';
-                if (lowerTier.includes('tier 5')) return '#F5F5F5';
-                if (lowerTier.includes('tier 6')) return '#EFEBE9';
+                if (lowerTier.includes('franchise') || lowerTier.includes('cornerstones')) return '#D0E1FD';
+                if (lowerTier.includes('everyday')) return '#E1F5FE';
+                if (lowerTier.includes('core utility') || lowerTier.includes('bench')) return '#EAE8FF';
+                if (lowerTier.includes('low-leverage') || lowerTier.includes('relievers')) return '#FFF3E0';
+                if (lowerTier.includes('replacement')) return '#F5F5F5';
+                if (lowerTier.includes('emergency') || lowerTier.includes('options')) return '#EFEBE9';
             }
 
-            // 3. HISTORICAL ARCHIVE PALETTE
+            // 3. HISTORICAL ARCHIVE (INACTIVES) TAB PALETTE
             if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
-                if (lowerTier.includes('tier 1')) return '#E2E3E5';
-                if (lowerTier.includes('tier 2')) return '#EBECEF';
-                if (lowerTier.includes('tier 3')) return '#FDF6E2';
-                if (lowerTier.includes('tier 4')) return '#F4F5F7';
-                if (lowerTier.includes('tier 5')) return '#F8F9FA';
-                if (lowerTier.includes('tier 6')) return '#FAFAFA';
-                if (lowerTier.includes('tier 7')) return '#FFFFFF';
+                if (lowerTier.includes('regulars') || lowerTier.includes('veterans')) return '#E2E3E5';
+                if (lowerTier.includes('depth') || lowerTier.includes('relievers')) return '#EBECEF';
+                if (lowerTier.includes('quad-a') || lowerTier.includes('expatriates')) return '#FDF6E2';
+                if (lowerTier.includes('triple-a')) return '#F4F5F7';
+                if (lowerTier.includes('double-a')) return '#F8F9FA';
+                if (lowerTier.includes('single-a')) return '#FAFAFA';
+                if (lowerTier.includes('complex') || lowerTier.includes('short-season')) return '#FFFFFF';
             }
 
             return defaultColor;
