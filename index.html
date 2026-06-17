@@ -169,44 +169,42 @@
             return text;
         }
 
-        // Resolves the color by cleaning the input and performing a fuzzy match on the tier name
-function getTierColor(tabName, tierString) {
-    const defaultColor = '#475569'; // Slate 600 default
+        function getTierColor(tabName, tierString) {
+    const defaultColor = '#94a3b8'; // Slate 400 default
     if (!tierString) return defaultColor;
     
-    // Normalize string to ignore case and parenthetical descriptions
     const cleanTier = tierString.toLowerCase().replace(/\(.*?\)/g, '').trim();
     const lowerTab = tabName.toLowerCase();
 
-    // 1. ACTIVE PROSPECTS
+    // 1. ACTIVE PROSPECTS (Vibrant Emeralds, Golds, and Blues)
     if (lowerTab.includes('prospects')) {
-        if (cleanTier.includes('tier 1')) return '#E2F0D9';
-        if (cleanTier.includes('tier 2')) return '#E6F4EA';
-        if (cleanTier.includes('tier 3')) return '#FFF2CC';
-        if (cleanTier.includes('tier 4')) return '#FCE8E6';
-        if (cleanTier.includes('tier 5')) return '#F1F3F4';
-        if (cleanTier.includes('tier 6')) return '#E8F0FE';
+        if (cleanTier.includes('tier 1')) return '#10b981'; // Vivid Emerald
+        if (cleanTier.includes('tier 2')) return '#3b82f6'; // Electric Blue
+        if (cleanTier.includes('tier 3')) return '#eab308'; // Bright Gold
+        if (cleanTier.includes('tier 4')) return '#f97316'; // Neon Orange
+        if (cleanTier.includes('tier 5')) return '#ec4899'; // Hot Pink
+        if (cleanTier.includes('tier 6')) return '#06b6d4'; // Bright Cyan
     }
     
-    // 2. MAJOR LEAGUERS
+    // 2. MAJOR LEAGUERS (Deep Premium Safaris and Royals)
     if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
-        if (cleanTier.includes('tier 1')) return '#D0E1FD';
-        if (cleanTier.includes('tier 2')) return '#E1F5FE';
-        if (cleanTier.includes('tier 3')) return '#EAE8FF';
-        if (cleanTier.includes('tier 4')) return '#FFF3E0';
-        if (cleanTier.includes('tier 5')) return '#F5F5F5';
-        if (cleanTier.includes('tier 6')) return '#EFEBE9';
+        if (cleanTier.includes('tier 1')) return '#2563eb'; // Royal Blue
+        if (cleanTier.includes('tier 2')) return '#0284c7'; // Sky Command Blue
+        if (cleanTier.includes('tier 3')) return '#8b5cf6'; // Vivid Purple
+        if (cleanTier.includes('tier 4')) return '#f59e0b'; // Amber
+        if (cleanTier.includes('tier 5')) return '#64748b'; // Steel Slate
+        if (cleanTier.includes('tier 6')) return '#b45309'; // Burnt Amber
     }
 
-    // 3. HISTORICAL ARCHIVE
+    // 3. HISTORICAL ARCHIVE (Bold Vintage Tones)
     if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
-        if (cleanTier.includes('tier 1')) return '#E2E3E5';
-        if (cleanTier.includes('tier 2')) return '#EBECEF';
-        if (cleanTier.includes('tier 3')) return '#FDF6E2';
-        if (cleanTier.includes('tier 4')) return '#F4F5F7';
-        if (cleanTier.includes('tier 5')) return '#F8F9FA';
-        if (cleanTier.includes('tier 6')) return '#FAFAFA';
-        if (cleanTier.includes('tier 7')) return '#FFFFFF';
+        if (cleanTier.includes('tier 1')) return '#ef4444'; // Crimson Red
+        if (cleanTier.includes('tier 2')) return '#f43f5e'; // Rose Gold
+        if (cleanTier.includes('tier 3')) return '#14b8a6'; // Saturated Teal
+        if (cleanTier.includes('tier 4')) return '#a855f7'; // Neon Violet
+        if (cleanTier.includes('tier 5')) return '#65a30d'; // Lime/Olive
+        if (cleanTier.includes('tier 6')) return '#475569'; // Dark Slate
+        if (cleanTier.includes('tier 7')) return '#cbd5e1'; // Stark Silver
     }
 
     return defaultColor;
@@ -271,24 +269,24 @@ function getTierColor(tabName, tierString) {
         const hexColor = getTierColor(currentTab, player.tier);
         const badge = document.createElement('div');
         
-        // Base dark card styling
-        badge.className = `p-4 bg-slate-900 rounded-xl hover:scale-[1.02] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24`;
+        // Premium dark slate background
+        badge.className = `p-4 bg-slate-900/90 rounded-xl hover:scale-[1.03] cursor-pointer transition-all duration-200 flex flex-col justify-between h-24 shadow-lg`;
         
-        // Solid, unmodified hex codes for absolute compatibility
+        // 2px solid border makes the bold color much more recognizable
         badge.style.borderColor = hexColor;
-        badge.style.borderWidth = '1px';
+        badge.style.borderWidth = '2px';
         badge.style.borderStyle = 'solid';
         
-        // Clean glow using standard box-shadow without complex string manipulations
-        badge.style.boxShadow = `0 0 10px ${hexColor}`;
+        // High-density glow effect matching the rich hue
+        badge.style.boxShadow = `0 0 14px -2px ${hexColor}60, inset 0 0 8px -4px ${hexColor}40`;
         badge.onclick = () => openModal(index);
         
-        // Directly inject the exact solid color into the text style properties
+        // Text inherits the heavy, dark saturated color codes
         badge.innerHTML = `
-            <div class="font-semibold transition text-sm sm:text-base line-clamp-2" style="color: ${hexColor} !important;">
+            <div class="font-bold transition text-sm sm:text-base line-clamp-2" style="color: ${hexColor} !important;">
                 ${player.name}
             </div>
-            <div class="text-[11px] font-bold uppercase tracking-wider mt-1" style="color: ${hexColor} !important;">
+            <div class="text-[11px] font-extrabold uppercase tracking-widest mt-1" style="color: ${hexColor} !important; opacity: 0.95;">
                 ${player.score ? 'Score: ' + player.score : 'Unrated'}
             </div>
         `;
