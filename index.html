@@ -203,7 +203,7 @@
             <div class="h-2 w-full bg-blue-500"></div>
             <div class="p-6">
                 <h3 class="text-xl font-extrabold text-white mb-2">Configure Connection API</h3>
-                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch and save dynamically directly into your Google Sheet's optimized flat API tables.</p>
+                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch data from your optimized flat API tables.</p>
                 
                 <div class="space-y-4">
                     <div>
@@ -225,7 +225,7 @@
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
             <p class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                API Flat Data Routing Protocol Active
+                API Formula Isolation Protocol Active
             </p>
         </div>
     </footer>
@@ -236,13 +236,14 @@
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        // Dynamic API sheet maps
+        // Reads load instantly from computed flat tables
         const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
+        // CRITICAL FIX: Writes target raw data sheets, bypassing structural array calculation conflicts!
         const writeSheetMap = {
             'Active Prospects': 'Active Prospects',
             'Active Major Leaguers': 'Active Major Leaguers',
@@ -319,19 +320,18 @@
             };
         }
 
-        // Offline Fallback Core Databases
+        // Local Memory Fallbacks
         const localProspects = [
             { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
             { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features premium barrel manipulation and plus-plus projectable raw power." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier right-handed hitting catcher originally selected by Oakland. Features plus raw power with elite receiving, game calling, and framing skills." },
-            { name: "Samad Taylor", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.6", col4: "SD", col5: "CLE, TOR, KC, SEA", col6: "CLE", col7: "SD, CLE, TOR, KC, SEA", col8: ".248 / .313 / .640 / 1 HR / 12 RBI", notes: "Fast, versatile utility player with experience at second base and in the outfield. Signed by San Diego after electing free agency in January." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier right-handed hitting catcher originally selected by Oakland. Features plus raw power with elite defensive receiver skills." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who became a legendary organizational asset within Cleveland's chain. Famously played all nine defensive positions in a single game." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who famously played all nine defensive positions in a single game for High-A Carolina in 2012." }
         ];
 
         async function loadTabData(tabName) {
@@ -634,38 +634,35 @@
                 localStorage.setItem(storageKey, JSON.stringify(currentAdded));
                 closeAddPlayerModal();
                 switchTab(targetTab);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
                 return;
             }
 
             try {
-                // FIXED STRATEGY FOR FORMULA CONFLICTS:
-                // Instead of using PUT /Player, which alters lines in place and breaks query expansions,
-                // we delete the original record first, and then cleanly write the updated parameters as a clean row.
-                // This ensures your `=QUERY()` blocks always have a clear runway to drop down without throwing #REF! blocks.
+                // FIXED PROTOCOL: Writes target raw sheets directly, leaving dynamic API formulas safely isolated
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
-                
-                if (isEditMode) {
-                    const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                    await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
-                }
+                let targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                let fetchMethod = 'POST';
 
-                const postUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                const response = await fetch(postUrl, {
-                    method: 'POST',
+                if (isEditMode) {
+                    targetUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                    fetchMethod = 'PUT';
+                }
+                
+                const response = await fetch(targetUrl, {
+                    method: fetchMethod,
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: [rowPayload] })
+                    body: JSON.stringify(isEditMode ? { data: rowPayload } : { data: [rowPayload] })
                 });
 
                 const result = await response.json();
                 
-                if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} successfully committed to sheet backend!`, "emerald");
+                if (result && (result.created || result.updated || !result.error)) {
+                    showToast("Success", `${pName} committed securely into database core rows!`, "emerald");
                     closeAddPlayerModal();
-                    setTimeout(() => { switchTab(targetTab); }, 600);
+                    // Slight breather delay to let Google Sheet's indexing finish before triggering page refresh
+                    setTimeout(() => { switchTab(targetTab); }, 800);
                 } else {
-                    showToast("API Error", "The configuration endpoint rejected the row payload.", "red");
+                    showToast("API Sync Error", "The sheet configuration rejected form payload.", "red");
                 }
             } catch (err) {
                 console.error("Write error:", err);
@@ -775,7 +772,7 @@
             BASE_API_URL = val;
             localStorage.setItem('sheetdb_api_url', val);
             closeSettingsModal();
-            showToast("Connected", "Successfully routed data streams to Flat API sub-sheets.", "emerald");
+            showToast("Connected", "Live Flat Data Sync pipeline initialized successfully.", "emerald");
             switchTab(currentTab);
         }
 
@@ -783,7 +780,7 @@
             BASE_API_URL = '';
             localStorage.removeItem('sheetdb_api_url');
             closeSettingsModal();
-            showToast("Offline Active", "Connected successfully to localized browser storage fallback.", "emerald");
+            showToast("Local Active", "Database disconnected. Reading from offline fallback.", "emerald");
             switchTab(currentTab);
         }
 
@@ -809,7 +806,6 @@
 
             toast.classList.remove('hidden');
             setTimeout(() => {
-                toast. Reinhardt = true;
                 toast.classList.remove('opacity-0');
                 toast.classList.remove('translate-y-10');
             }, 10);
