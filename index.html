@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .modal-transition {
@@ -27,7 +26,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
 
-    <!-- Header Navigation Bar -->
     <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -61,14 +59,13 @@
         </div>
     </header>
 
-    <!-- Main Content Grid -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
         <div class="bg-slate-900/40 p-5 rounded-2xl border border-slate-900 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
             <div class="relative flex-grow max-w-lg">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="text" id="search-bar" oninput="handleSearch()" placeholder="Search players, notes, organization codes..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                <input type="text" id="search-bar" oninput="handleSearch()" placeholder="Search players, notes, organizations..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
             <div class="flex items-center gap-3 self-end md:self-auto">
                 <span id="data-source-badge" class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">Local Fallback Memory</span>
@@ -85,11 +82,9 @@
         </div>
 
         <div id="player-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Dynamic items mount here -->
-        </div>
+            </div>
     </main>
 
-    <!-- Notification Toast Alerts -->
     <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 transition-all duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-2xl flex gap-3 items-start hidden">
         <div class="p-1 rounded-lg" id="toast-icon"></div>
         <div class="flex-grow">
@@ -98,7 +93,6 @@
         </div>
     </div>
 
-    <!-- DETAILS MODAL PANEL -->
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
             <div id="modal-accent-bar" class="h-2 w-full"></div>
@@ -128,7 +122,6 @@
         </div>
     </div>
 
-    <!-- ADD / EDIT DATA MODAL -->
     <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
             <div id="form-accent-banner" class="h-2 w-full bg-emerald-500"></div>
@@ -161,8 +154,7 @@
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
-                                <!-- JavaScript choices updated dynamically -->
-                            </select>
+                                </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Talent-to-Success Score</label>
@@ -206,7 +198,6 @@
         </div>
     </div>
 
-    <!-- SYNC CONFIG MODAL -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 modal-transition" id="settings-card">
             <div class="h-2 w-full bg-blue-500"></div>
@@ -222,14 +213,13 @@
                 </div>
                 
                 <div class="flex justify-end gap-3 pt-6 border-t border-slate-800 mt-6">
-                    <button onclick="useLocalFallback()" class="px-4 py-2 text-xs font-bold bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition cursor-pointer">Disconnect / Clear Cache</button>
+                    <button onclick="useLocalFallback()" class="px-4 py-2 text-xs font-bold bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-xl transition cursor-pointer">Disconnect / Clear Cache</button>
                     <button onclick="saveApiSettings()" class="px-5 py-2.5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition shadow-md cursor-pointer">Save Connection</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- App Footer -->
     <footer class="border-t border-slate-900 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
@@ -240,17 +230,23 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE LOGIC PIPELINE ENGINE -->
     <script>
         let BASE_API_URL = localStorage.getItem('sheetdb_api_url') || '';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        const backendSheetMap = {
+        // Dynamic API sheet maps
+        const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
+        };
+
+        const writeSheetMap = {
+            'Active Prospects': 'Active Prospects',
+            'Active Major Leaguers': 'Active Major Leaguers',
+            'Historical Archive (Inactives)': 'Historical Archive (Inactives)'
         };
 
         // Dark Bold Recognizable Neon Tones
@@ -323,23 +319,19 @@
             };
         }
 
-        // Standalone Core Data Fallback Directories
+        // Offline Fallback Core Databases
         const localProspects = [
             { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features premium barrel manipulation and plus-plus projectable raw power." },
-            { name: "Francisco Renteria", tier: "Tier 4: High-Variance / Toolsy Sleepers", score: "4.8", col4: "PHI", col5: "None", col6: "PHI", col7: "PHI, None, PHI", col8: "Phillies #3 Prospect (2026)", notes: "Physically imposing outfielder signed for $4 million in January 2026. Possesses spectacular, raw power projection and elite bat speed." }
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features premium barrel manipulation and plus-plus projectable raw power." }
         ];
 
         const localMLB = [
             { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier right-handed hitting catcher originally selected by Oakland. Features plus raw power with elite receiving, game calling, and framing skills." },
-            { name: "Samad Taylor", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.6", col4: "SD", col5: "CLE, TOR, KC, SEA", col6: "CLE", col7: "SD, CLE, TOR, KC, SEA", col8: ".248 / .313 / .640 / 1 HR / 12 RBI", notes: "Fast, versatile utility player with experience at second base and in the outfield. Signed by San Diego after electing free agency in January." },
-            { name: "Bryan King", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.2", col4: "HOU", col5: "None", col6: "CHC", col7: "HOU, None, CHC", col8: "2.60 ERA / 125 SO / 1.12 WHIP", notes: "Left-handed reliever selected by Chicago before emerging in Houston. Weaponizes a running sinker and sweeping low-80s slider." }
+            { name: "Samad Taylor", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.6", col4: "SD", col5: "CLE, TOR, KC, SEA", col6: "CLE", col7: "SD, CLE, TOR, KC, SEA", col8: ".248 / .313 / .640 / 1 HR / 12 RBI", notes: "Fast, versatile utility player with experience at second base and in the outfield. Signed by San Diego after electing free agency in January." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who became a legendary organizational asset within Cleveland's chain. Famously played all nine defensive positions in a single game." },
-            { name: "Alberto Bastardo", tier: "Tier 4: Triple-A Stalwarts", score: "4.7", col4: "Triple-A", col5: "BAL, LAD, MIA", col6: "BAL", col7: "BAL, BAL, LAD, MIA", col8: "Peak: Triple-A Albuquerque Rotation Asset", notes: "Left-handed starter who logged over 920 professional innings and led the Venezuelan Winter League in ERA during the 2009-2010 season." },
-            { name: "Chevy Clarke", tier: "Tier 7: Complex League / Short-Season Stints", score: "2.0", col4: "Rookie / Short-Season", col5: "LAA", col6: "LAA", col7: "LAA, LAA", col8: "30th overall pick in 2010 Draft", notes: "Highly touted first-round draft pick. Blessed with double-plus raw power but contact issues ultimately stalled his progression." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who became a legendary organizational asset within Cleveland's chain. Famously played all nine defensive positions in a single game." }
         ];
 
         async function loadTabData(tabName) {
@@ -364,7 +356,6 @@
                     localPlayersCache = [...localHistorical, ...localSaved];
                 }
 
-                // Auto Sorting Engine descending by Talent-to-Success Rating
                 localPlayersCache.sort((a, b) => parseFloat(b.score || 0) - parseFloat(a.score || 0));
                 filteredPlayersCache = [...localPlayersCache];
                 renderPlayerBadges();
@@ -377,7 +368,7 @@
             document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 animate-pulse";
 
             try {
-                const targetSheet = backendSheetMap[tabName] || tabName;
+                const targetSheet = readSheetMap[tabName] || tabName;
                 const targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(targetSheet.trim())}`;
                 
                 const response = await fetch(targetUrl);
@@ -390,7 +381,6 @@
                         localPlayersCache.push(playerObj);
                     });
                     
-                    // Auto Sorting Engine descending by Talent-to-Success Rating
                     localPlayersCache.sort((a, b) => parseFloat(b.score || 0) - parseFloat(a.score || 0));
                     filteredPlayersCache = [...localPlayersCache];
                     
@@ -402,7 +392,7 @@
                 }
             } catch (error) {
                 console.error("API Read Error:", error);
-                showToast("Connection Error", "Could not read sheet headers. Using localized backup.", "red");
+                showToast("Connection Error", "Could not read sheet data. Reverting to local cache.", "red");
                 BASE_API_URL = '';
                 loadTabData(tabName);
             } finally {
@@ -527,7 +517,6 @@
                 }
             });
 
-            // Set up Edit button handler passing player parameters dynamically
             const editBtn = document.getElementById('modal-edit-btn');
             editBtn.onclick = () => startEditPlayer(player);
 
@@ -547,13 +536,12 @@
         function startEditPlayer(player) {
             closeModal();
             
-            // Populate form structures using the selected player values
             document.getElementById('form-modal-title').innerText = "Edit Player Record Profile";
             document.getElementById('form-accent-banner').className = "h-2 w-full bg-blue-500";
             document.getElementById('form-edit-original-name').value = player.name;
             
             document.getElementById('form-target-tab').value = currentTab;
-            document.getElementById('form-target-tab').disabled = true; // Block switching tabs mid-edit
+            document.getElementById('form-target-tab').disabled = true; 
             
             document.getElementById('form-name').value = player.name;
             document.getElementById('form-score').value = player.score;
@@ -564,7 +552,6 @@
             document.getElementById('form-notes').value = player.notes;
 
             adaptFormLabels();
-            // Preset tier dropdown value
             setTimeout(() => { document.getElementById('form-tier').value = player.tier; }, 15);
 
             const modal = document.getElementById('add-player-modal');
@@ -627,7 +614,6 @@
                 rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Highest Level": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Peak Prospect Standing": pCol8, "Notes": pNotes };
             }
 
-            // Local Mock Engine Implementation for editing/adding
             if (!BASE_API_URL) {
                 let storageKey = 'added_prospects';
                 if (targetTab === 'Active Major Leaguers') storageKey = 'added_mlb';
@@ -637,18 +623,12 @@
                 let localModelObj = { name: pName, tier: pTier, score: pScore, col4: pCol4, col5: pCol5, col6: pCol6, col7: pCol7, col8: pCol8, notes: pNotes };
 
                 if (isEditMode) {
-                    // Update layout
                     let idx = currentAdded.findIndex(x => x.name.toLowerCase() === originalName.toLowerCase());
-                    if (idx !== -1) {
-                        currentAdded[idx] = localModelObj;
-                    } else {
-                        // Check if it was part of defaults, if so append as modification entry override
-                        currentAdded.push(localModelObj);
-                    }
-                    showToast("Record Updated", `${pName} updated successfully in local session memory.`, "emerald");
+                    if (idx !== -1) { currentAdded[idx] = localModelObj; } else { currentAdded.push(localModelObj); }
+                    showToast("Record Updated", `${pName} updated in local session cache.`, "emerald");
                 } else {
                     currentAdded.push(localModelObj);
-                    showToast("Record Added", `${pName} appended to local tracking storage directory.`, "emerald");
+                    showToast("Record Added", `${pName} appended to local session storage.`, "emerald");
                 }
                 
                 localStorage.setItem(storageKey, JSON.stringify(currentAdded));
@@ -659,32 +639,33 @@
                 return;
             }
 
-            // Cloud API Sync Pipeline
             try {
-                const backendSheet = backendSheetMap[targetTab] || targetTab;
-                let targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(backendSheet.trim())}`;
-                let fetchMethod = 'POST';
-
-                // If editing an entry, convert request payload targeting the row key parameter via PUT/Player
-                if (isEditMode) {
-                    targetUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(backendSheet.trim())}`;
-                    fetchMethod = 'PUT';
-                }
+                // FIXED STRATEGY FOR FORMULA CONFLICTS:
+                // Instead of using PUT /Player, which alters lines in place and breaks query expansions,
+                // we delete the original record first, and then cleanly write the updated parameters as a clean row.
+                // This ensures your `=QUERY()` blocks always have a clear runway to drop down without throwing #REF! blocks.
+                const writeSheet = writeSheetMap[targetTab] || targetTab;
                 
-                const response = await fetch(targetUrl, {
-                    method: fetchMethod,
+                if (isEditMode) {
+                    const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                    await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
+                }
+
+                const postUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                const response = await fetch(postUrl, {
+                    method: 'POST',
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify(isEditMode ? { data: rowPayload } : { data: [rowPayload] })
+                    body: JSON.stringify({ data: [rowPayload] })
                 });
 
                 const result = await response.json();
                 
-                if (result && (result.created || result.updated || !result.error)) {
-                    showToast("Success", `${pName} saved cleanly to cloud sheet matrix!`, "emerald");
+                if (result && (result.created || !result.error)) {
+                    showToast("Success", `${pName} successfully committed to sheet backend!`, "emerald");
                     closeAddPlayerModal();
-                    setTimeout(() => { switchTab(targetTab); }, 400);
+                    setTimeout(() => { switchTab(targetTab); }, 600);
                 } else {
-                    showToast("API Error", "The configuration endpoint rejected row headers structure.", "red");
+                    showToast("API Error", "The configuration endpoint rejected the row payload.", "red");
                 }
             } catch (err) {
                 console.error("Write error:", err);
@@ -828,6 +809,7 @@
 
             toast.classList.remove('hidden');
             setTimeout(() => {
+                toast. Reinhardt = true;
                 toast.classList.remove('opacity-0');
                 toast.classList.remove('translate-y-10');
             }, 10);
