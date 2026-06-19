@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -184,7 +185,7 @@
 
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Detailed Scouting Report Notes</label>
-                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes, mechanical breakdowns, or tool projections..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
+                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-2">
@@ -225,7 +226,7 @@
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
             <p class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                API Target Parameter Alignment Protocol
+                API Spacer Offset Protocol Active
             </p>
         </div>
     </footer>
@@ -236,52 +237,48 @@
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        // Read references link to Formula sheets
         const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
-        // Write references link strictly to original text tabs
         const writeSheetMap = {
             'Active Prospects': 'Active Prospects',
             'Active Major Leaguers': 'Active Major Leaguers',
             'Historical Archive (Inactives)': 'Historical Archive (Inactives)'
         };
 
-        // Dark Bold Recognizable Neon Tones
         function getTierColor(tabName, tierString) {
             const defaultColor = '#94a3b8';
             if (!tierString) return defaultColor;
-            
             const cleanTier = tierString.toLowerCase().replace(/\(.*?\)/g, '').trim();
             const lowerTab = tabName.toLowerCase();
 
             if (lowerTab.includes('prospects')) {
-                if (cleanTier.includes('tier 1')) return '#10b981'; // Emerald Green
-                if (cleanTier.includes('tier 2')) return '#3b82f6'; // Electric Blue
-                if (cleanTier.includes('tier 3')) return '#eab308'; // Bright Gold
-                if (cleanTier.includes('tier 4')) return '#f97316'; // Orange
-                if (cleanTier.includes('tier 5')) return '#ec4899'; // Hot Pink
-                if (cleanTier.includes('tier 6')) return '#06b6d4'; // Cyan
+                if (cleanTier.includes('tier 1')) return '#10b981';
+                if (cleanTier.includes('tier 2')) return '#3b82f6';
+                if (cleanTier.includes('tier 3')) return '#eab308';
+                if (cleanTier.includes('tier 4')) return '#f97316';
+                if (cleanTier.includes('tier 5')) return '#ec4899';
+                if (cleanTier.includes('tier 6')) return '#06b6d4';
             }
             if (lowerTab.includes('major leaguers') || lowerTab.includes('mlb')) {
-                if (cleanTier.includes('tier 1')) return '#2563eb'; // Royal Blue
-                if (cleanTier.includes('tier 2')) return '#0284c7'; // Sky Blue
-                if (cleanTier.includes('tier 3')) return '#8b5cf6'; // Vivid Purple
-                if (cleanTier.includes('tier 4')) return '#f59e0b'; // Amber Gold
-                if (cleanTier.includes('tier 5')) return '#64748b'; // Steel Gray
-                if (cleanTier.includes('tier 6')) return '#b45309'; // Dark Burnt Orange
+                if (cleanTier.includes('tier 1')) return '#2563eb';
+                if (cleanTier.includes('tier 2')) return '#0284c7';
+                if (cleanTier.includes('tier 3')) return '#8b5cf6';
+                if (cleanTier.includes('tier 4')) return '#f59e0b';
+                if (cleanTier.includes('tier 5')) return '#64748b';
+                if (cleanTier.includes('tier 6')) return '#b45309';
             }
             if (lowerTab.includes('historical') || lowerTab.includes('archive') || lowerTab.includes('inactive')) {
-                if (cleanTier.includes('tier 1')) return '#ef4444'; // Crimson Red
-                if (cleanTier.includes('tier 2')) return '#f43f5e'; // Rose
-                if (cleanTier.includes('tier 3')) return '#14b8a6'; // Teal
-                if (cleanTier.includes('tier 4')) return '#a855f7'; // Orchid Violet
-                if (cleanTier.includes('tier 5')) return '#65a30d'; // Olive Lime
-                if (cleanTier.includes('tier 6')) return '#475569'; // Dark Slate
-                if (cleanTier.includes('tier 7')) return '#cbd5e1'; // Platinum Silver
+                if (cleanTier.includes('tier 1')) return '#ef4444';
+                if (cleanTier.includes('tier 2')) return '#f43f5e';
+                if (cleanTier.includes('tier 3')) return '#14b8a6';
+                if (cleanTier.includes('tier 4')) return '#a855f7';
+                if (cleanTier.includes('tier 5')) return '#65a30d';
+                if (cleanTier.includes('tier 6')) return '#475569';
+                if (cleanTier.includes('tier 7')) return '#cbd5e1';
             }
             return defaultColor;
         }
@@ -296,7 +293,6 @@
             return text;
         }
 
-        // Formula-safe decrypted lookup decoder
         function normalizeRowData(row) {
             const getVal = (possibleKeys, fallbackVal = "") => {
                 for (let k of possibleKeys) {
@@ -324,18 +320,18 @@
             };
         }
 
-        // Local Storage Mock Engine Data Backups
+        // Local Fallbacks
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical shortstop signed by Milwaukee. Features elite raw power and carrying arm profiles." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Left-handed outfield phenom selected 5th overall in the 2023 draft. High hit tool execution capacity." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb shortstop signed by Milwaukee." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing left-handed outfield phenom projectable power asset." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium everyday franchise catcher. Elite boundary tracking framing and sub-1.90 pop times." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier everyday franchise catcher asset." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Legendary super-utility infielder who famously played all nine positions in a single professional game." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Legendary infielder who played all 9 positions in one match." }
         ];
 
         async function loadTabData(tabName) {
@@ -392,11 +388,11 @@
                     document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     renderPlayerBadges();
                 } else {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but flat sheet section "${targetSheet}" returned no entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but section returned no entries.</div>`;
                 }
             } catch (error) {
                 console.error("API Read Error:", error);
-                showToast("Connection Error", "Could not read sheet data. Reverting to local cache.", "red");
+                showToast("Connection Error", "Reverting to cache.", "red");
                 BASE_API_URL = '';
                 loadTabData(tabName);
             } finally {
@@ -407,7 +403,6 @@
         function renderPlayerBadges() {
             const grid = document.getElementById('player-grid');
             grid.innerHTML = '';
-            
             document.getElementById('player-count').innerText = `${filteredPlayersCache.length} Players Listed`;
 
             if (filteredPlayersCache.length === 0) {
@@ -440,7 +435,6 @@
                         <span>${player.score ? 'Score: ' + player.score : 'Unrated'}</span>
                         <svg class="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                     </div>
-                    <div class="absolute -right-8 -bottom-8 w-24 h-24 rounded-full opacity-0 group-hover:opacity-10 transition duration-500 blur-xl" style="background-color: ${hexColor}"></div>
                 `;
                 grid.appendChild(badge);
             });
@@ -476,7 +470,6 @@
             badgeEl.style.color = hexColor;
             badgeEl.style.backgroundColor = `${hexColor}10`;
             badgeEl.innerText = player.tier || 'Unclassified Profile';
-            
             document.getElementById('modal-player-notes').innerText = player.notes || 'No evaluations logged.';
 
             const metaGrid = document.getElementById('modal-meta-grid');
@@ -539,7 +532,6 @@
 
         function startEditPlayer(player) {
             closeModal();
-            
             document.getElementById('form-modal-title').innerText = "Edit Player Record Profile";
             document.getElementById('form-accent-banner').className = "h-2 w-full bg-blue-500";
             document.getElementById('form-edit-original-name').value = player.name;
@@ -609,14 +601,15 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // Build dynamic text keys matching columns natively
+            // SOLVED: Add an empty string prefix property block matching Column A empty space!
+            // This aligns keys line-by-line with SheetDB data offsets matching your exact spreadsheet files.
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
-                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
+                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
             } else if (targetTab === 'Active Major Leaguers') {
-                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Career MLB Stats": pCol8, "Notes": pNotes };
+                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Career MLB Stats": pCol8, "Notes": pNotes };
             } else {
-                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Highest Level": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Peak Prospect Standing": pCol8, "Notes": pNotes };
+                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Highest Level": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Peak Prospect Standing": pCol8, "Notes": pNotes };
             }
 
             if (!BASE_API_URL) {
@@ -630,12 +623,11 @@
                 if (isEditMode) {
                     let idx = currentAdded.findIndex(x => x.name.toLowerCase() === originalName.toLowerCase());
                     if (idx !== -1) { currentAdded[idx] = localModelObj; } else { currentAdded.push(localModelObj); }
-                    showToast("Record Updated", `${pName} updated in local session cache.`, "emerald");
+                    showToast("Record Updated", `${pName} updated.`, "emerald");
                 } else {
                     currentAdded.push(localModelObj);
-                    showToast("Record Added", `${pName} appended to local session storage.`, "emerald");
+                    showToast("Record Added", `${pName} cataloged.`, "emerald");
                 }
-                
                 localStorage.setItem(storageKey, JSON.stringify(currentAdded));
                 closeAddPlayerModal();
                 switchTab(targetTab);
@@ -643,11 +635,10 @@
             }
 
             try {
-                // FIXED PROTOCOL: Appends parameters directly to Sheet target sheets
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
                 
                 if (isEditMode) {
-                    // Target sheet query parameter strictly assigned to prevent SheetDB tab defaults
+                    // Match by column parameter explicitly to find and scrub the old raw profile row
                     const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
                     await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
                 }
@@ -660,17 +651,16 @@
                 });
 
                 const result = await response.json();
-                
                 if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} safely synced to tracking database columns!`, "emerald");
+                    showToast("Success", `${pName} synchronized cleanly!`, "emerald");
                     closeAddPlayerModal();
                     setTimeout(() => { switchTab(targetTab); }, 800);
                 } else {
-                    showToast("API Sync Error", "The sheet configuration rejected the row payload.", "red");
+                    showToast("API Sync Error", "Payload layout mismatch.", "red");
                 }
             } catch (err) {
                 console.error("Write error:", err);
-                showToast("Connection Lost", "API failed. Saved securely to session cache layer.", "yellow");
+                showToast("Connection Lost", "Saved to local cache storage.", "yellow");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
@@ -691,7 +681,6 @@
             if (activeBtn) {
                 activeBtn.className = "px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 nav-btn bg-blue-600 text-white cursor-pointer shadow-md shadow-blue-600/20";
             }
-
             loadTabData(tabName);
         }
 
@@ -701,52 +690,36 @@
             const labelCol8 = document.getElementById('label-col8');
             const inputCol8 = document.getElementById('form-col8');
             const tierSelector = document.getElementById('form-tier');
-
             tierSelector.innerHTML = '';
 
             if (selectedTab === 'Historical Archive (Inactives)') {
                 labelCol4.innerText = "Highest Level Met";
                 labelCol8.innerText = "Peak Board Placement";
                 inputCol8.placeholder = "e.g., #15 Peak Prospect Standing";
-
                 const options = [
-                    "Tier 1: Major League Regulars / High-Impact Veterans",
-                    "Tier 2: Major League Depth / Up-and-Down Relievers",
-                    "Tier 3: Quad-A Lifers / International Expatriates",
-                    "Tier 4: Triple-A Stalwarts",
-                    "Tier 5: Double-A Advanced Corners",
-                    "Tier 6: Full-Season Single-A Anchors",
-                    "Tier 7: Complex League / Short-Season Stints"
+                    "Tier 1: Major League Regulars / High-Impact Veterans", "Tier 2: Major League Depth / Up-and-Down Relievers",
+                    "Tier 3: Quad-A Lifers / International Expatriates", "Tier 4: Triple-A Stalwarts",
+                    "Tier 5: Double-A Advanced Corners", "Tier 6: Full-Season Single-A Anchors", "Tier 7: Complex League / Short-Season Stints"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
-
             } else if (selectedTab === 'Active Major Leaguers') {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Career MLB Stats";
                 inputCol8.placeholder = "e.g., .254 AVG, 84 HR, 2.3 WAR";
-
                 const options = [
-                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)",
-                    "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
-                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)",
-                    "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
-                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)",
-                    "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
+                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)", "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
+                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
+                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)", "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
-
             } else {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Current Prospect Standing";
                 inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
-
                 const options = [
-                    "Tier 1: Elite / Near-Ready Impact",
-                    "Tier 2: Premium System Pillars",
-                    "Tier 3: Projected Major League Role Players",
-                    "Tier 4: High-Variance / Toolsy Sleepers",
-                    "Tier 5: Organizational Depth / Low-Minor Projects",
-                    "Tier 6: Pure International Professionals"
+                    "Tier 1: Elite / Near-Ready Impact", "Tier 2: Premium System Pillars",
+                    "Tier 3: Projected Major League Role Players", "Tier 4: High-Variance / Toolsy Sleepers",
+                    "Tier 5: Organizational Depth / Low-Minor Projects", "Tier 6: Pure International Professionals"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
             }
@@ -761,7 +734,6 @@
         }
 
         function closeSettingsModal() {
-            document.getElementById('api-endpoint-input').value = BASE_API_URL;
             const modal = document.getElementById('settings-modal');
             const card = document.getElementById('settings-card');
             modal.classList.add('opacity-0'); card.classList.add('scale-95');
@@ -777,7 +749,7 @@
             BASE_API_URL = val;
             localStorage.setItem('sheetdb_api_url', val);
             closeSettingsModal();
-            showToast("Connected", "Successfully aligned API data streams.", "emerald");
+            showToast("Connected", "API data streams aligned successfully.", "emerald");
             switchTab(currentTab);
         }
 
@@ -785,7 +757,7 @@
             BASE_API_URL = '';
             localStorage.removeItem('sheetdb_api_url');
             closeSettingsModal();
-            showToast("Local Active", "Database disconnected. Reading from offline fallback.", "emerald");
+            showToast("Local Active", "Reading from offline fallback.", "emerald");
             switchTab(currentTab);
         }
 
