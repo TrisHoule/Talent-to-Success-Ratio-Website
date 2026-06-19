@@ -236,12 +236,14 @@
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
+        // Read configuration fetches data from computation views
         const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
+        // Write configuration commits rows directly to raw text sheets
         const writeSheetMap = {
             'Active Prospects': 'Active Prospects',
             'Active Major Leaguers': 'Active Major Leaguers',
@@ -321,8 +323,8 @@
 
         // Offline Directories
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical shortstop signed by Milwaukee." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Left-handed outfield phenom selected 5th overall." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb shortstop signed by Milwaukee." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing left-handed outfield phenom projectable power asset." }
         ];
 
         const localMLB = [
@@ -600,7 +602,7 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // Mapped payload adding the empty string "" to account for Column A spacer offset cleanly
+            // Mapped keys including the leading blank column tracking property ""
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
                 rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
@@ -641,9 +643,9 @@
                     body: JSON.stringify({ data: [rowPayload] })
                 };
 
-                // FIXED INSTANT PATCH REPLACEMENT PIPELINE:
-                // Instead of a DELETE-then-POST sequence, this performs a targeted in-place data replacement using PATCH.
-                // This routes directly to the core row text cells matching the specific player's name without dropping data.
+                // FIXED INTERFACE REWRITE PIPELINE:
+                // Instead of a DELETE request, we trigger an HTTP PATCH update.
+                // This targets the cell on your sheet, updating details in-place without deleting the row.
                 if (isEditMode) {
                     targetUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
                     requestOptions = {
