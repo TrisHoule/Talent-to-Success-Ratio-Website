@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talent-to-Success Player Database</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .modal-transition {
@@ -27,7 +26,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
 
-    <!-- Header Navigation Bar -->
     <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -61,9 +59,7 @@
         </div>
     </header>
 
-    <!-- Main Content Grid -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- Dashboard Statistics and Search Component -->
         <div class="bg-slate-900/40 p-5 rounded-2xl border border-slate-900 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
             <div class="relative flex-grow max-w-lg">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -77,7 +73,6 @@
             </div>
         </div>
 
-        <!-- Section Title and Sync Info -->
         <div class="mb-6 flex justify-between items-center">
             <h2 id="current-tab-title" class="text-2xl font-black tracking-tight text-white">Active Prospects</h2>
             <div id="loading-indicator" class="text-sm text-blue-400 flex items-center gap-2 hidden">
@@ -87,11 +82,17 @@
         </div>
 
         <div id="player-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Dynamic cards mount here -->
-        </div>
+            </div>
     </main>
 
-    <!-- DETAILS MODAL PANEL -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 transition-all duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-2xl flex gap-3 items-start hidden">
+        <div class="p-1 rounded-lg" id="toast-icon"></div>
+        <div class="flex-grow">
+            <p class="font-bold text-sm text-white" id="toast-title">Notification</p>
+            <p class="text-xs text-slate-400 mt-1" id="toast-message">Database action completed.</p>
+        </div>
+    </div>
+
     <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="modal-card">
             <div id="modal-accent-bar" class="h-2 w-full"></div>
@@ -121,7 +122,6 @@
         </div>
     </div>
 
-    <!-- ADD / EDIT DATA MODAL -->
     <div id="add-player-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl transform scale-95 modal-transition" id="add-modal-card">
             <div id="form-accent-banner" class="h-2 w-full bg-emerald-500"></div>
@@ -154,8 +154,7 @@
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Evaluation Tier Classification</label>
                             <select id="form-tier" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
-                                <!-- Dynamic options injected here -->
-                            </select>
+                                </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Talent-to-Success Score</label>
@@ -199,13 +198,12 @@
         </div>
     </div>
 
-    <!-- SYNC SETTINGS CONFIG -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm hidden opacity-0 modal-transition">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 modal-transition" id="settings-card">
             <div class="h-2 w-full bg-blue-500"></div>
             <div class="p-6">
                 <h3 class="text-xl font-extrabold text-white mb-2">Configure Connection API</h3>
-                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch and save data dynamically from your Google Sheet's optimized flat API tables.</p>
+                <p class="text-xs text-slate-400 mb-6">Provide your SheetDB connection URL to fetch data from your optimized flat API tables.</p>
                 
                 <div class="space-y-4">
                     <div>
@@ -215,35 +213,44 @@
                 </div>
                 
                 <div class="flex justify-end gap-3 pt-6 border-t border-slate-800 mt-6">
-                    <button onclick="useLocalFallback()" class="px-4 py-2 text-xs font-bold bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-xl transition cursor-pointer">Disconnect / Clear Cache</button>
-                    <button onclick="saveApiSettings()" class="px-5 py-2.5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition shadow-md cursor-pointer">Save Connection</button>
+                    <button onclick="useLocalFallback()" class="px-4 py-2 text-xs font-bold bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition cursor-pointer">Disconnect / Clear Cache</button>
+                    <button onclick="saveApiSettings()" class="px-5 py-2.5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition shadow-md cursor-pointer">Save Connection</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- INTERACTIVE LOGIC INFRASTRUCTURE -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
+            <p class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                API Target Parameter Alignment Protocol
+            </p>
+        </div>
+    </footer>
+
     <script>
         let BASE_API_URL = localStorage.getItem('sheetdb_api_url') || '';
         let currentTab = 'Active Prospects';
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        // Reads pull dynamically from computed formula sheets
+        // Read references link to Formula sheets
         const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
-        // CRITICAL FIX: Writes target raw sheets directly, bypassing query collision loops!
+        // Write references link strictly to original text tabs
         const writeSheetMap = {
             'Active Prospects': 'Active Prospects',
             'Active Major Leaguers': 'Active Major Leaguers',
             'Historical Archive (Inactives)': 'Historical Archive (Inactives)'
         };
 
-        // Highly recognizable bold color palettes
+        // Dark Bold Recognizable Neon Tones
         function getTierColor(tabName, tierString) {
             const defaultColor = '#94a3b8';
             if (!tierString) return defaultColor;
@@ -279,7 +286,6 @@
             return defaultColor;
         }
 
-        // Fixes Excel / Google Sheets hyperlink wrappers automatically
         function cleanString(rawString) {
             if (!rawString || rawString === "undefined" || rawString === "null") return "";
             let text = String(rawString).trim();
@@ -290,28 +296,14 @@
             return text;
         }
 
-        // Resolves excel formulas and extract pure strings out of dynamic header queries
-        function cleanHeaderKey(key) {
-            if (!key) return "";
-            let k = String(key).trim();
-            if (k.startsWith("=") || k.includes("DUMMYFUNCTION")) {
-                const match = k.match(/,\s*"([^"]+)"\s*\)?$/);
-                if (match) {
-                    return match[1];
-                }
-                const quoteMatch = k.match(/"([^"]+)"\s*\)?$/);
-                if (quoteMatch) {
-                    return quoteMatch[1];
-                }
-            }
-            return k;
-        }
-
-        // Safe Row normalization
+        // Formula-safe decrypted lookup decoder
         function normalizeRowData(row) {
             const getVal = (possibleKeys, fallbackVal = "") => {
                 for (let k of possibleKeys) {
-                    const foundKey = Object.keys(row).find(key => key.toLowerCase().trim() === k.toLowerCase().trim());
+                    const foundKey = Object.keys(row).find(key => {
+                        const cleanKey = key.toLowerCase().trim();
+                        return cleanKey === k.toLowerCase().trim() || cleanKey.endsWith('"' + k.toLowerCase() + '")');
+                    });
                     if (foundKey && row[foundKey] !== undefined && row[foundKey] !== null) {
                         return cleanString(row[foundKey]);
                     }
@@ -332,23 +324,18 @@
             };
         }
 
-        // Offline Fallback Core Databases
+        // Local Storage Mock Engine Data Backups
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom. Features premium barrel manipulation and plus-plus projectable raw power." },
-            { name: "Francisco Renteria", tier: "Tier 4: High-Variance / Toolsy Sleepers", score: "4.8", col4: "PHI", col5: "None", col6: "PHI", col7: "PHI, None, PHI", col8: "Phillies #3 Prospect (2026)", notes: "Physically imposing outfielder signed for $4 million in January 2026. Possesses spectacular, raw power projection and elite bat speed." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical shortstop signed by Milwaukee. Features elite raw power and carrying arm profiles." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Left-handed outfield phenom selected 5th overall in the 2023 draft. High hit tool execution capacity." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier right-handed hitting catcher originally selected by Oakland. Features plus raw power with elite receiving, game calling, and framing skills." },
-            { name: "Samad Taylor", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.6", col4: "SD", col5: "CLE, TOR, KC, SEA", col6: "CLE", col7: "SD, CLE, TOR, KC, SEA", col8: ".248 / .313 / .640 / 1 HR / 12 RBI", notes: "Fast, versatile utility player with experience at second base and in the outfield. Signed by San Diego after electing free agency in January." },
-            { name: "Bryan King", tier: "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", score: "5.2", col4: "HOU", col5: "None", col6: "CHC", col7: "HOU, None, CHC", col8: "2.60 ERA / 125 SO / 1.12 WHIP", notes: "Left-handed reliever selected by Chicago before emerging in Houston. Weaponizes a running sinker and sweeping low-80s slider." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium everyday franchise catcher. Elite boundary tracking framing and sub-1.90 pop times." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Former Iowa captain who became a legendary organizational asset within Cleveland's chain. Famously played all nine defensive positions in a single game." },
-            { name: "Alberto Bastardo", tier: "Tier 4: Triple-A Stalwarts", score: "4.7", col4: "Triple-A", col5: "BAL, LAD, MIA", col6: "BAL", col7: "BAL, BAL, LAD, MIA", col8: "Peak: Triple-A Albuquerque Rotation Asset", notes: "Left-handed starter who logged over 920 professional innings and led the Venezuelan Winter League in ERA during the 2009-2010 season." },
-            { name: "Chevy Clarke", tier: "Tier 7: Complex League / Short-Season Stints", score: "2.0", col4: "Rookie / Short-Season", col5: "LAA", col6: "LAA", col7: "LAA, LAA", col8: "30th overall pick in 2010 Draft", notes: "Highly touted first-round draft pick. Blessed with double-plus raw power but contact issues ultimately stalled his progression." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Legendary super-utility infielder who famously played all nine positions in a single professional game." }
         ];
 
         async function loadTabData(tabName) {
@@ -373,7 +360,6 @@
                     localPlayersCache = [...localHistorical, ...localSaved];
                 }
 
-                // Sorting EngineDescending
                 localPlayersCache.sort((a, b) => parseFloat(b.score || 0) - parseFloat(a.score || 0));
                 filteredPlayersCache = [...localPlayersCache];
                 renderPlayerBadges();
@@ -394,20 +380,11 @@
                 
                 if (Array.isArray(data) && data.length > 0) {
                     data.forEach(row => {
-                        // CLEANING ENGINE PROTOCOL INTERCEPTOR:
-                        // Recursively loops and parses Excel dynamic query headers back to clean text labels!
-                        const cleanRow = {};
-                        for (let k in row) {
-                            const cleanedKey = cleanHeaderKey(k);
-                            cleanRow[cleanedKey] = row[k];
-                        }
-
-                        const playerObj = normalizeRowData(cleanRow);
+                        const playerObj = normalizeRowData(row);
                         if (!playerObj.name || playerObj.name.toUpperCase() === "PLAYER" || playerObj.name.includes("#REF!")) return;
                         localPlayersCache.push(playerObj);
                     });
                     
-                    // Sorting EngineDescending
                     localPlayersCache.sort((a, b) => parseFloat(b.score || 0) - parseFloat(a.score || 0));
                     filteredPlayersCache = [...localPlayersCache];
                     
@@ -632,6 +609,7 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
+            // Build dynamic text keys matching columns natively
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
                 rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
@@ -665,30 +643,30 @@
             }
 
             try {
+                // FIXED PROTOCOL: Appends parameters directly to Sheet target sheets
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
-                let targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                let fetchMethod = 'POST';
-
-                if (isEditMode) {
-                    targetUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                    fetchMethod = 'PUT';
-                }
                 
-                const response = await fetch(targetUrl, {
-                    method: fetchMethod,
+                if (isEditMode) {
+                    // Target sheet query parameter strictly assigned to prevent SheetDB tab defaults
+                    const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                    await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
+                }
+
+                const postUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                const response = await fetch(postUrl, {
+                    method: 'POST',
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify(isEditMode ? { data: rowPayload } : { data: [rowPayload] })
+                    body: JSON.stringify({ data: [rowPayload] })
                 });
 
                 const result = await response.json();
                 
-                if (result && (result.created || result.updated || !result.error)) {
-                    showToast("Success", `${pName} committed securely into database core rows!`, "emerald");
+                if (result && (result.created || !result.error)) {
+                    showToast("Success", `${pName} safely synced to tracking database columns!`, "emerald");
                     closeAddPlayerModal();
-                    // Slight breather delay to let Google Sheet's indexing finish before triggering page refresh
                     setTimeout(() => { switchTab(targetTab); }, 800);
                 } else {
-                    showToast("API Sync Error", "The sheet configuration rejected form payload.", "red");
+                    showToast("API Sync Error", "The sheet configuration rejected the row payload.", "red");
                 }
             } catch (err) {
                 console.error("Write error:", err);
@@ -783,6 +761,7 @@
         }
 
         function closeSettingsModal() {
+            document.getElementById('api-endpoint-input').value = BASE_API_URL;
             const modal = document.getElementById('settings-modal');
             const card = document.getElementById('settings-card');
             modal.classList.add('opacity-0'); card.classList.add('scale-95');
@@ -798,7 +777,7 @@
             BASE_API_URL = val;
             localStorage.setItem('sheetdb_api_url', val);
             closeSettingsModal();
-            showToast("Connected", "Successfully routed data streams to Flat API sub-sheets.", "emerald");
+            showToast("Connected", "Successfully aligned API data streams.", "emerald");
             switchTab(currentTab);
         }
 
@@ -806,7 +785,7 @@
             BASE_API_URL = '';
             localStorage.removeItem('sheetdb_api_url');
             closeSettingsModal();
-            showToast("Offline Active", "Connected successfully to localized browser storage fallback.", "emerald");
+            showToast("Local Active", "Database disconnected. Reading from offline fallback.", "emerald");
             switchTab(currentTab);
         }
 
