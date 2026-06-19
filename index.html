@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +48,7 @@
                 </nav>
                 <div class="flex gap-2 w-full sm:w-auto justify-stretch">
                     <button onclick="openSettingsModal()" class="px-3 py-2 text-sm bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm hover:border-slate-700" title="Configure SheetDB Link">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37 2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </button>
                     <button onclick="openAddPlayerModal()" class="flex-grow sm:flex-grow-0 px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-lg hover:shadow-emerald-600/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
@@ -226,7 +225,7 @@
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
             <p class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                API Spacer Offset Protocol Active
+                In-Place Row Replacement Mode Active
             </p>
         </div>
     </footer>
@@ -320,18 +319,18 @@
             };
         }
 
-        // Local Fallbacks
+        // Offline Directories
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb shortstop signed by Milwaukee." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing left-handed outfield phenom projectable power asset." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical shortstop signed by Milwaukee." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Left-handed outfield phenom selected 5th overall." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier everyday franchise catcher asset." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium catcher with elite sub-1.90 pop times." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Legendary infielder who played all 9 positions in one match." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Played all nine defensive positions in a single game." }
         ];
 
         async function loadTabData(tabName) {
@@ -388,7 +387,7 @@
                     document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     renderPlayerBadges();
                 } else {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but section returned no entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but tab sheet returned no entries.</div>`;
                 }
             } catch (error) {
                 console.error("API Read Error:", error);
@@ -601,8 +600,7 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // SOLVED: Add an empty string prefix property block matching Column A empty space!
-            // This aligns keys line-by-line with SheetDB data offsets matching your exact spreadsheet files.
+            // Mapped payload adding the empty string "" to account for Column A spacer offset cleanly
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
                 rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
@@ -636,23 +634,30 @@
 
             try {
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
-                
-                if (isEditMode) {
-                    // Match by column parameter explicitly to find and scrub the old raw profile row
-                    const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                    await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
-                }
-
-                const postUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
-                const response = await fetch(postUrl, {
+                let targetUrl = `${BASE_API_URL}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                let requestOptions = {
                     method: 'POST',
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: [rowPayload] })
-                });
+                };
 
+                // FIXED INSTANT PATCH REPLACEMENT PIPELINE:
+                // Instead of a DELETE-then-POST sequence, this performs a targeted in-place data replacement using PATCH.
+                // This routes directly to the core row text cells matching the specific player's name without dropping data.
+                if (isEditMode) {
+                    targetUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
+                    requestOptions = {
+                        method: 'PATCH',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: rowPayload })
+                    };
+                }
+
+                const response = await fetch(targetUrl, requestOptions);
                 const result = await response.json();
-                if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} synchronized cleanly!`, "emerald");
+
+                if (result && (result.created || result.updated || !result.error)) {
+                    showToast("Success", `${pName} updated instantly in your sheet!`, "emerald");
                     closeAddPlayerModal();
                     setTimeout(() => { switchTab(targetTab); }, 800);
                 } else {
@@ -734,6 +739,7 @@
         }
 
         function closeSettingsModal() {
+            document.getElementById('api-endpoint-input').value = BASE_API_URL;
             const modal = document.getElementById('settings-modal');
             const card = document.getElementById('settings-card');
             modal.classList.add('opacity-0'); card.classList.add('scale-95');
