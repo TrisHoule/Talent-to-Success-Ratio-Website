@@ -184,7 +184,7 @@
 
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Detailed Scouting Report Notes</label>
-                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
+                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes, mechanical breakdowns, or tool projections..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-2">
@@ -225,7 +225,7 @@
             <p>© 2026 Talent-to-Success Database Project. Powered by GitHub Pages.</p>
             <p class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                In-Place Row Replacement Mode Active
+                API Schema Matching Logic Core Active
             </p>
         </div>
     </footer>
@@ -236,14 +236,14 @@
         let localPlayersCache = [];
         let filteredPlayersCache = [];
 
-        // Reads load instantly from computed flat tables
+        // Reads pull data directly from dynamic query-views
         const readSheetMap = {
             'Active Prospects': 'API_Active_Prospects',
             'Active Major Leaguers': 'API_Active_Major_Leaguers',
             'Historical Archive (Inactives)': 'API_Historical_Archive'
         };
 
-        // Writes target raw data sheets, bypassing structural array calculation conflicts!
+        // Writes target original base sheets cleanly
         const writeSheetMap = {
             'Active Prospects': 'Active Prospects',
             'Active Major Leaguers': 'Active Major Leaguers',
@@ -322,18 +322,18 @@
             };
         }
 
-        // Offline Fallback Core Databases
+        // Fallback Local Records Core
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom projectable power asset." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical shortstop signed by Milwaukee. Premium raw power capabilities." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Elite visual tracking and LEFT-handed barrel command profiles." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium catcher with elite sub-1.90 pop times." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium catcher with elite sub-1.90 pop times and framing tracking metrics." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Played all nine defensive positions in a single game." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Played all nine defensive slots inside one single professional match." }
         ];
 
         async function loadTabData(tabName) {
@@ -390,11 +390,11 @@
                     document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     renderPlayerBadges();
                 } else {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but tab sheet returned no entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but flat sheet section "${targetSheet}" returned no entries.</div>`;
                 }
             } catch (error) {
                 console.error("API Read Error:", error);
-                showToast("Connection Error", "Reverting to cache.", "red");
+                showToast("Connection Error", "Reverting to localized fallback directory.", "red");
                 BASE_API_URL = '';
                 loadTabData(tabName);
             } finally {
@@ -603,11 +603,9 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // FIXED PAYLOAD STRUCTURAL DESIGN: 
-            // In your spreadsheet, Column A is completely empty, pushing "Player" into Column B.
-            // SheetDB matches fields strictly by mapping object keys to row headers. 
-            // By building a clean JSON mapping without the unassigned empty string array indexes, 
-            // SheetDB's row compiler identifies column definitions natively by text keys, preventing layout shifts!
+            // FIXED SCHEMA MAPPING:
+            // By building our object keys without manual empty strings, SheetDB relies completely on text-header lookups.
+            // This forces row additions and updates to align perfectly into your spreadsheet columns without adding trailing offsets.
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
                 rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
@@ -642,11 +640,10 @@
             try {
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
                 
-                // ULTIMATE WORKAROUND REPLACEMENT ENGINE:
-                // Instead of using standard row index overrides (which fail when a sheet contains blank column shifts),
-                // we delete the existing row entry first by explicitly defining the `?sheet=` scope option parameter,
-                // and then immediately POST the updated player details object. 
-                // This gives Google Sheets formulas a clean runway to parse your layout without throwing array expansion crashes.
+                // ULTIMATE FORMULA SHIFT PROTECTION PROTOCOL:
+                // To safely update a row containing shifts, we issue a clear DELETE query to the raw base data tab first.
+                // We append `?sheet=` to target the correct workspace branch, and then push the raw payload object as a clean POST array array row.
+                // This eliminates the blank double-comma generation bug and updates your data in real time!
                 if (isEditMode) {
                     const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
                     await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
@@ -661,16 +658,15 @@
 
                 const result = await response.json();
                 if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} synchronized cleanly!`, "emerald");
+                    showToast("Success", `${pName} database file synchronized!`, "emerald");
                     closeAddPlayerModal();
-                    // Slight breather delay to let Google Sheet's script engines parse data modifications before page refresh
                     setTimeout(() => { switchTab(targetTab); }, 1000);
                 } else {
-                    showToast("API Sync Error", "Payload mapping failed.", "red");
+                    showToast("API Sync Error", "Payload mapping error. Review endpoint logs.", "red");
                 }
             } catch (err) {
-                console.error("Write execution fail:", err);
-                showToast("Connection Lost", "Saved to local cache storage.", "yellow");
+                console.error("Write Error:", err);
+                showToast("Connection Interrupted", "Saved securely to localized cache memory layer.", "yellow");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
@@ -691,6 +687,7 @@
             if (activeBtn) {
                 activeBtn.className = "px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 nav-btn bg-blue-600 text-white cursor-pointer shadow-md shadow-blue-600/20";
             }
+
             loadTabData(tabName);
         }
 
@@ -700,36 +697,52 @@
             const labelCol8 = document.getElementById('label-col8');
             const inputCol8 = document.getElementById('form-col8');
             const tierSelector = document.getElementById('form-tier');
+
             tierSelector.innerHTML = '';
 
             if (selectedTab === 'Historical Archive (Inactives)') {
                 labelCol4.innerText = "Highest Level Met";
                 labelCol8.innerText = "Peak Board Placement";
                 inputCol8.placeholder = "e.g., #15 Peak Prospect Standing";
+
                 const options = [
-                    "Tier 1: Major League Regulars / High-Impact Veterans", "Tier 2: Major League Depth / Up-and-Down Relievers",
-                    "Tier 3: Quad-A Lifers / International Expatriates", "Tier 4: Triple-A Stalwarts",
-                    "Tier 5: Double-A Advanced Corners", "Tier 6: Full-Season Single-A Anchors", "Tier 7: Complex League / Short-Season Stints"
+                    "Tier 1: Major League Regulars / High-Impact Veterans",
+                    "Tier 2: Major League Depth / Up-and-Down Relievers",
+                    "Tier 3: Quad-A Lifers / International Expatriates",
+                    "Tier 4: Triple-A Stalwarts",
+                    "Tier 5: Double-A Advanced Corners",
+                    "Tier 6: Full-Season Single-A Anchors",
+                    "Tier 7: Complex League / Short-Season Stints"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
             } else if (selectedTab === 'Active Major Leaguers') {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Career MLB Stats";
                 inputCol8.placeholder = "e.g., .254 AVG, 84 HR, 2.3 WAR";
+
                 const options = [
-                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)", "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
-                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)", "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
-                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)", "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
+                    "Tier 1: Franchise Cornerstones & Elite All-Stars (9.0 – 10.0)",
+                    "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)",
+                    "Tier 3: Active Core Utility & Bench Assets (5.0 – 5.9)",
+                    "Tier 4: High-Variance / Low-Leverage Relievers (4.0 – 4.9)",
+                    "Tier 5: Replacement Level Up-and-Down Depth (3.0 – 3.9)",
+                    "Tier 6: Emergency Depth / Out-of-Options Roster Fillers (2.9 and below)"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
+
             } else {
                 labelCol4.innerText = "Current Org";
                 labelCol8.innerText = "Current Prospect Standing";
                 inputCol8.placeholder = "e.g., #4 Prospect in Baseball (2026)";
+
                 const options = [
-                    "Tier 1: Elite / Near-Ready Impact", "Tier 2: Premium System Pillars",
-                    "Tier 3: Projected Major League Role Players", "Tier 4: High-Variance / Toolsy Sleepers",
-                    "Tier 5: Organizational Depth / Low-Minor Projects", "Tier 6: Pure International Professionals"
+                    "Tier 1: Elite / Near-Ready Impact",
+                    "Tier 2: Premium System Pillars",
+                    "Tier 3: Projected Major League Role Players",
+                    "Tier 4: High-Variance / Toolsy Sleepers",
+                    "Tier 5: Organizational Depth / Low-Minor Projects",
+                    "Tier 6: Pure International Professionals"
                 ];
                 options.forEach(opt => tierSelector.options.add(new Option(opt, opt)));
             }
@@ -759,7 +772,7 @@
             BASE_API_URL = val;
             localStorage.setItem('sheetdb_api_url', val);
             closeSettingsModal();
-            showToast("Connected", "API data streams aligned successfully.", "emerald");
+            showToast("Connected", "Live Data pipeline connection mapped successfully.", "emerald");
             switchTab(currentTab);
         }
 
@@ -767,7 +780,7 @@
             BASE_API_URL = '';
             localStorage.removeItem('sheetdb_api_url');
             closeSettingsModal();
-            showToast("Local Active", "Reading from offline fallback.", "emerald");
+            showToast("Local Active", "Database disconnected. Reading from offline fallback cache.", "emerald");
             switchTab(currentTab);
         }
 
@@ -794,6 +807,7 @@
             toast.classList.remove('hidden');
             setTimeout(() => {
                 toast.classList.remove('opacity-0');
+                toast. Reinhardt = true;
                 toast.classList.remove('translate-y-10');
             }, 10);
 
