@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         const API_BASE = "https://sheetdb.io/api/v1/xxcu38ri2nudv"; 
         let currentTab = "DB_Prospects";
         let allPlayersData = [];
@@ -93,10 +93,21 @@
 
             try {
                 const response = await fetch(`${API_BASE}?sheet=${currentTab}`);
+                
+                // Diagnostic check to see what SheetDB says
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`Status ${response.status}: ${errText}`);
+                }
+
                 allPlayersData = await response.json();
                 renderTable(allPlayersData);
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">Failed to load data. Verify SheetDB configuration and tab names.</td></tr>`;
+                // Displays the exact raw error in the table body for debugging
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400 font-mono text-sm">
+                    Failed to load data.<br>Error Details: ${error.message}<br><br>
+                    <span class="text-gray-400 text-xs">Verify that your Google Sheet tab is named exactly: "${currentTab}" (case-sensitive)</span>
+                </td></tr>`;
             }
         }
 
@@ -105,7 +116,7 @@
             const tbody = document.getElementById('playerTableBody');
             tbody.innerHTML = "";
 
-            if (data.length === 0) {
+            if (!Array.isArray(data) || data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-500">No matching players found.</td></tr>`;
                 return;
             }
@@ -161,6 +172,7 @@
             document.getElementById('formModal').classList.remove('hidden');
         }
 
+        // Close form modal clear values
         function closeFormModal() {
             document.getElementById('formModal').classList.add('hidden');
             document.getElementById('playerForm').reset();
@@ -186,20 +198,17 @@
             e.preventDefault();
             const id = document.getElementById('player-id').value;
             
-            // Build dynamic payload matching the active sheet's structural naming syntax
             const payload = {
                 Name: document.getElementById('player-name').value,
                 Position: document.getElementById('player-position').value
             };
 
-            // Map Team vs Organization column key
             if (currentTab === "DB_Prospects") {
                 payload.Organization = document.getElementById('player-org').value;
             } else {
                 payload.Team = document.getElementById('player-org').value;
             }
 
-            // Map Tier vs Status column key
             if (currentTab === "DB_Historical") {
                 payload.Status = document.getElementById('player-tier').value;
             } else {
@@ -209,15 +218,13 @@
             try {
                 if (id) {
                     payload.id = id;
-                    // PUT update processing using SheetDB column matching syntax
                     await fetch(`${API_BASE}/id/${id}?sheet=${currentTab}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ data: payload })
                     });
                 } else {
-                    // POST addition processing
-                    payload.id = Date.now().toString(); // Auto-generate clean distinct timestamp ID
+                    payload.id = Date.now().toString(); 
                     await fetch(`${API_BASE}?sheet=${currentTab}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -227,11 +234,10 @@
                 closeFormModal();
                 fetchTabData();
             } catch (err) {
-                alert("Transaction failed. Double check API and column mappings.");
+                alert("Transaction failed. Check network panel.");
             }
         }
 
-        // Initialize application instance on load
         window.onload = fetchTabData;
     </script>
 </body>
