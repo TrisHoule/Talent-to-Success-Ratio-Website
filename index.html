@@ -184,7 +184,7 @@
 
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Detailed Scouting Report Notes</label>
-                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes, mechanical breakdowns, or tool projections..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
+                        <textarea id="form-notes" rows="3" placeholder="Provide extensive background notes..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 font-sans"></textarea>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-2">
@@ -324,16 +324,16 @@
 
         // Offline Fallback Core Databases
         const localProspects = [
-            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical switch-hitting shortstop signed by Milwaukee." },
-            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Left-handed outfield phenom drafted 5th overall in the 2023 draft." }
+            { name: "Jesús Made", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.4", col4: "MIL", col5: "None", col6: "MIL", col7: "MIL, None, MIL", col8: "#1 Prospect in Baseball (2026)", notes: "Ultra-physical 6'1\", 221 lb switch-hitting shortstop signed by Milwaukee. Features elite 65-grade power with a plus 60-grade arm." },
+            { name: "Walker Jenkins", tier: "Tier 1: Elite / Near-Ready Impact", score: "9.3", col4: "MIN", col5: "None", col6: "MIN", col7: "MIN, None, MIN", col8: "#11 Prospect in Baseball (2026)", notes: "Imposing 6'3\" left-handed hitting outfield phenom projectable power asset." }
         ];
 
         const localMLB = [
-            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premier everyday franchise catcher asset." }
+            { name: "Sean Murphy", tier: "Tier 2: Premium Everyday Starters & Pillars (6.0 – 8.9)", score: "8.4", col4: "ATL", col5: "ATH", col6: "ATH", col7: "ATL, ATH, ATH", col8: ".227 / .324 / .748 / 93 HR / 285 RBI", notes: "Premium catcher with elite sub-1.90 pop times." }
         ];
 
         const localHistorical = [
-            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "High-IQ super-utility infielder who played all 9 positions in one match." }
+            { name: "Justin Toole", tier: "Tier 4: Triple-A Stalwarts", score: "4.8", col4: "Triple-A", col5: "CLE", col6: "CLE", col7: "CLE, CLE", col8: "Mariners Director of Player Dev", notes: "Played all nine defensive positions in a single game." }
         ];
 
         async function loadTabData(tabName) {
@@ -390,7 +390,7 @@
                     document.getElementById('data-source-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     renderPlayerBadges();
                 } else {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but flat sheet section "${targetSheet}" returned no entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">Connected, but tab sheet returned no entries.</div>`;
                 }
             } catch (error) {
                 console.error("API Read Error:", error);
@@ -603,14 +603,18 @@
             const pNotes = document.getElementById('form-notes').value.trim() || 'No evaluation logged.';
             const pCol7 = `${pCol4}, ${pCol5}, ${pCol6}`;
 
-            // SOLVED FIX: Map properties using explicit key strings matching Column A offset shift exactly
+            // FIXED PAYLOAD STRUCTURAL DESIGN: 
+            // In your spreadsheet, Column A is completely empty, pushing "Player" into Column B.
+            // SheetDB matches fields strictly by mapping object keys to row headers. 
+            // By building a clean JSON mapping without the unassigned empty string array indexes, 
+            // SheetDB's row compiler identifies column definitions natively by text keys, preventing layout shifts!
             let rowPayload = {};
             if (targetTab === 'Active Prospects') {
-                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
+                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Current Prospect Standing": pCol8, "Notes": pNotes };
             } else if (targetTab === 'Active Major Leaguers') {
-                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Career MLB Stats": pCol8, "Notes": pNotes };
+                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Current Org": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Career MLB Stats": pCol8, "Notes": pNotes };
             } else {
-                rowPayload = { "": "", "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Highest Level": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Peak Prospect Standing": pCol8, "Notes": pNotes };
+                rowPayload = { "Player": pName, "Tier": pTier, "Talent-to-Success Score": pScore, "Highest Level": pCol4, "Past Orgs": pCol5, "Drafted/Signed By": pCol6, "All Orgs Search": pCol7, "Peak Prospect Standing": pCol8, "Notes": pNotes };
             }
 
             if (!BASE_API_URL) {
@@ -638,12 +642,11 @@
             try {
                 const writeSheet = writeSheetMap[targetTab] || targetTab;
                 
-                // ULTIMATE REAL-TIME ALIGNMENT RESOLUTION:
-                // Instead of direct PUT requests to sub-URLs, we route everything as a POST request to the base sheet URL.
-                // For additions, it appends a clean row to the bottom.
-                // For edits, we send a standard POST with the query parameter `?sheet=TabName`. If editing, we first execute
-                // a DELETE to strip the old record row from the original data sheet, and then immediately post the new record payload.
-                // Because we explicitly map the empty Column A key (`"": ""`), SheetDB cleanly clears and appends row values in real time!
+                // ULTIMATE WORKAROUND REPLACEMENT ENGINE:
+                // Instead of using standard row index overrides (which fail when a sheet contains blank column shifts),
+                // we delete the existing row entry first by explicitly defining the `?sheet=` scope option parameter,
+                // and then immediately POST the updated player details object. 
+                // This gives Google Sheets formulas a clean runway to parse your layout without throwing array expansion crashes.
                 if (isEditMode) {
                     const deleteUrl = `${BASE_API_URL}/Player/${encodeURIComponent(originalName)}?sheet=${encodeURIComponent(writeSheet.trim())}`;
                     await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
@@ -658,16 +661,17 @@
 
                 const result = await response.json();
                 if (result && (result.created || !result.error)) {
-                    showToast("Success", `${pName} updated instantly in sheet!`, "emerald");
+                    showToast("Success", `${pName} synchronized cleanly!`, "emerald");
                     closeAddPlayerModal();
-                    setTimeout(() => { switchTab(targetTab); }, 800);
+                    // Slight breather delay to let Google Sheet's script engines parse data modifications before page refresh
+                    setTimeout(() => { switchTab(targetTab); }, 1000);
                 } else {
-                    showToast("API Sync Error", "Payload layout mismatch.", "red");
+                    showToast("API Sync Error", "Payload mapping failed.", "red");
                 }
             } catch (err) {
-                console.error("Write error:", err);
+                console.error("Write execution fail:", err);
                 showToast("Connection Lost", "Saved to local cache storage.", "yellow");
-            } pieces = true; {
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
             }
